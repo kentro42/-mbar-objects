@@ -134,7 +134,7 @@ function closeDetail(){
   overlay.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scaleX}, ${scaleY})`;
   setTimeout(() => {
     overlay.classList.remove('show');
-    mediaBox.innerHTML = ''; // detiene el video al cerrar
+    mediaBox.innerHTML = '';
   }, 460);
 }
 closeBtn.addEventListener('click', closeDetail);
