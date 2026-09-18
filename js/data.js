@@ -1,12 +1,4 @@
-/* ============================================================
-   CONFIGURACIÓN DE CLOUDINARY
-   ============================================================
-   1. Entra a console.cloudinary.com → Dashboard.
-   2. Copia el valor "Cloud name" (NO la API Key ni el API Secret,
-      esos nunca deben ir en un archivo que subas a GitHub).
-   3. Pégalo abajo, reemplazando "tu-cloud-name".
-   ============================================================ */
-const CLOUD_NAME = "tu-cloud-name";
+const CLOUD_NAME = "genszcmv";
 
 // arma la URL pública de una imagen a partir de su "public ID" en Cloudinary
 function imagenUrl(publicId){
