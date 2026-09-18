@@ -13,17 +13,6 @@ function posterUrl(publicId){
   return `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/so_0,f_jpg,q_auto,w_500/${publicId}.jpg`;
 }
 
-/* ============================================================
-   PIEZAS DEL LOCAL
-   ============================================================
-   Cada objeto real necesita, subido a Cloudinary dentro de una
-   carpeta "objetos/", un video con el mismo nombre que su "id"
-   (ej: objetos/pieza-001.mp4). El "id" es el "public ID" que
-   Cloudinary te muestra después de subir el archivo.
-
-   Para agregar una pieza nueva: sube su video a Cloudinary y
-   copia un bloque como los de abajo, cambiando los datos.
-   ============================================================ */
 const objetos = [
   {
     numero: "001",
