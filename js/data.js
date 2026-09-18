@@ -6,7 +6,7 @@
       esos nunca deben ir en un archivo que subas a GitHub).
    3. Pégalo abajo, reemplazando "tu-cloud-name".
    ============================================================ */
-const CLOUD_NAME = "genszcmv";
+const CLOUD_NAME = "tu-cloud-name";
 
 // arma la URL pública de una imagen a partir de su "public ID" en Cloudinary
 function imagenUrl(publicId){
