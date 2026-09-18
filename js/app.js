@@ -1,6 +1,3 @@
-/* Este archivo asume que data.js ya se cargó antes y que existe
-   la variable global "objetos" con la lista de piezas. */
-
 const PER_PAGE = 8;
 const TOTAL_PAGES = Math.max(1, Math.ceil(objetos.length / PER_PAGE));
 let currentPage = 0;
@@ -79,7 +76,6 @@ function turnPage(targetPage, direction){
   }, 1120);
 }
 
-/* ---------- ficha de detalle con zoom ---------- */
 const overlay = document.getElementById('overlay');
 const mediaBox = document.getElementById('mediaBox');
 const detailContent = document.getElementById('detailContent');
