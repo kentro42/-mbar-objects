@@ -57,8 +57,7 @@ function turnPage(targetPage, direction){
   attachPageEvents(backSide, targetPage);
 
   leaf.style.transformOrigin = direction === 'next' ? 'left center' : 'right center';
-  leaf.classList.add('turning'); // activa preserve-3d solo mientras dura el giro
-
+  leaf.classList.add('turning');
   requestAnimationFrame(() => {
     leaf.style.transform = direction === 'next' ? 'rotateY(-180deg)' : 'rotateY(180deg)';
   });
@@ -70,8 +69,8 @@ function turnPage(targetPage, direction){
     backSide.innerHTML = '';
     leaf.style.transition = 'none';
     leaf.style.transform = 'rotateY(0deg)';
-    leaf.classList.remove('turning'); // vuelve a scroll normal, sin contexto 3D
-    void leaf.offsetHeight; // fuerza reflow antes de restaurar la transición
+    leaf.classList.remove('turning');
+    void leaf.offsetHeight;
     leaf.style.transition = '';
   }, 1120);
 }
@@ -88,8 +87,6 @@ function openDetail(id, sourceEl){
   const rect = sourceEl.getBoundingClientRect();
   const stageRect = stage.getBoundingClientRect();
 
-  // video propio alojado en Cloudinary: se reproduce dentro del mismo
-  // recuadro, sin redirigir a ninguna otra página.
   mediaBox.innerHTML = `
     <video controls preload="none" poster="${o.foto}" playsinline>
       <source src="${o.video}" type="video/mp4">
@@ -111,8 +108,6 @@ function openDetail(id, sourceEl){
     <p class="body">${o.p2}</p>
   `;
 
-  // el overlay siempre mide 100% / 100vh por CSS; solo animamos su
-  // transform (más liviano que animar left/top/width/height).
   const scaleX = rect.width / stageRect.width;
   const scaleY = rect.height / window.innerHeight;
   const translateX = rect.left - stageRect.left;
