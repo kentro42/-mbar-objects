@@ -12,12 +12,11 @@ function buildPageHTML(pageIndex){
     <div class="polaroid" data-id="${o.id}">
       <div class="shot" style="background-image:url('${o.foto}')"></div>
       <div class="num">${o.tag}</div>
-      <div class="cap">✦</div>
     </div>
   `).join('');
   return `
     <div class="home-header">
-      <div class="mark">Casa Violeta Azul</div>
+      <div class="mark">Ambar Casa Violeta Azul</div>
       <h1>El Álbum</h1>
       <div class="sub">Toca una fotografía</div>
     </div>
