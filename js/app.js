@@ -1,3 +1,4 @@
+alert("¡El JavaScript se está ejecutando!");
 window.onerror = function(message, source, lineno, colno, error) {
     document.body.innerHTML += `<div style="color: red; padding: 20px; font-size: 18px; position: absolute; top: 0; z-index: 9999; background: white;">Error detectado: ${message} (línea ${lineno})</div>`;
 };
