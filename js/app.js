@@ -1,3 +1,7 @@
+window.onerror = function(message, source, lineno, colno, error) {
+    document.body.innerHTML += `<div style="color: red; padding: 20px; font-size: 18px; position: absolute; top: 0; z-index: 9999; background: white;">Error detectado: ${message} (línea ${lineno})</div>`;
+};
+
 const PER_PAGE = 8;
 const TOTAL_PAGES = Math.max(1, Math.ceil(objetos.length / PER_PAGE));
 let currentPage = 0;
