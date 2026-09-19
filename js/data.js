@@ -1,4 +1,4 @@
-const CLOUD_NAME = "tu_cloud_name_aqui"; 'genszcmv'
+const CLOUD_NAME = "genszcmv";
 
 const plantillas = [
   {title:"Singer de pedal, modelo 66", subtitle:"La pieza que abrió el taller de la abuela", categoria:"Máquina de coser", origen:"Alemania", material:"Hierro fundido y roble", uso:"Confección textil", year:"1932", p1:"Esta máquina llegó al local hace más de una década, traída por una clienta que la heredó de su abuela.", p2:"Toca el video para verla en movimiento."},
@@ -35,3 +35,5 @@ for(let i=0; i<15; i++){
     p2: t.p2
   });
 }
+objetos[0].foto = "80e09bd1d6fec9dab31e192f8f0c9004.jpg";
+objetos[0].video = "LdzSFBtqLks";

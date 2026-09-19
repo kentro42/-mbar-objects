@@ -108,3 +108,27 @@ h2.title{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:28p
 .fact dt{ font-size:11px; letter-spacing:0.04em; color:var(--brass); margin-bottom:3px; }
 .fact dd{ margin:0; font-size:14px; }
 p.body{ font-size:14.5px; line-height:1.6; margin:0 0 14px; max-width:36ch; }
+
+/* ---------- CÓDIGO QR ---------- */
+.qr-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* 📍 Posicionado en la esquina inferior derecha */
+  margin-top: 20px;
+}
+.qr-box img {
+  width: 90px;
+  height: 90px;
+  background: #ffffff;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.qr-box span {
+  font-size: 10px;
+  color: var(--brass);
+  margin-top: 4px;
+  font-family: 'Work Sans', sans-serif;
+  letter-spacing: 0.05em;
+}

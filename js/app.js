@@ -100,7 +100,16 @@ let lastRect = null;
 let lastScale = null;
 
 function openDetail(id, sourceEl){
-  const o = objetos.find(x=>x.id===id);
+    const o = objetos.find(x=>x.id===id);
+      const urlPieza = window.location.href;
+  const qrHtml = (o.id === 1) 
+    ? `<div class="qr-box">
+         <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(urlPieza)}" alt="QR Pieza 1">
+         <span>QR Pieza 001</span>
+       </div>` 
+    : '';
+
+  
   const rect = sourceEl.getBoundingClientRect();
   const stageRect = stage.getBoundingClientRect();
   lastRect = rect;
@@ -122,7 +131,9 @@ function openDetail(id, sourceEl){
     </dl>
     <p class="body">${o.p1}</p>
     <p class="body">${o.p2}</p>
+    ${qrHtml}
   `;
+
 
   const scaleX = rect.width / stageRect.width;
   const scaleY = rect.height / window.innerHeight;
