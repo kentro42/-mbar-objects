@@ -47,8 +47,8 @@ function attachPageEvents(container, pageIndex) {
   if (next) next.addEventListener('click', () => turnPage(pageIndex + 1, 'next'));
 }
 
-// Inicialización segura cuando el DOM está completamente cargado
-document.addEventListener('DOMContentLoaded', () => {
+// Inicialización segura
+
   const frontSide = document.getElementById('frontSide');
   const backSide = document.getElementById('backSide');
   const leaf = document.getElementById('leaf');
