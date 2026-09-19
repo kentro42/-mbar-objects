@@ -1,4 +1,5 @@
-/* ---------- datos: 50 piezas generadas a partir de 10 plantillas ---------- */
+const CLOUD_NAME = "tu_cloud_name_aqui"; 'genszcmv'
+
 const plantillas = [
   {title:"Singer de pedal, modelo 66", subtitle:"La pieza que abrió el taller de la abuela", categoria:"Máquina de coser", origen:"Alemania", material:"Hierro fundido y roble", uso:"Confección textil", year:"1932", p1:"Esta máquina llegó al local hace más de una década, traída por una clienta que la heredó de su abuela.", p2:"Toca el video para verla en movimiento."},
   {title:"Reloj de péndulo Junghans", subtitle:"Marcó el ritmo del local por 40 años", categoria:"Reloj de pared", origen:"Alemania", material:"Nogal y latón", uso:"Cronometraje doméstico", year:"1958", p1:"Su péndulo de latón todavía marca la hora con precisión.", p2:"Video de ejemplo — reemplazar por el clip real."},
@@ -13,16 +14,24 @@ const plantillas = [
 ];
 
 const objetos = [];
-for(let i=0;i<50;i++){
+for(let i=0; i<15; i++){
   const t = plantillas[i % plantillas.length];
   const num = String(i+1).padStart(3,'0');
   objetos.push({
-    id:i+1, tag:`Pieza ${num}`,
-    title:t.title, subtitle:t.subtitle, categoria:t.categoria, origen:t.origen,
-    material:t.material, uso:t.uso, year:`Circa ${t.year}`,
-    procedencia:"Colección del local", estado:"Exhibición",
-    foto:`https://picsum.photos/seed/obj${i+1}/400/400`,
-    video:"LdzSFBtqLks",
-    p1:t.p1, p2:t.p2
+    id: i+1, 
+    tag: `Pieza ${num}`,
+    title: t.title, 
+    subtitle: t.subtitle, 
+    categoria: t.categoria, 
+    origen: t.origen,
+    material: t.material, 
+    uso: t.uso, 
+    year: `Circa ${t.year}`,
+    procedencia: "Colección del local", 
+    estado: "Exhibición",
+    foto: `https://picsum.photos/seed/obj${i+1}/400/400`, // 👈 Si dejas este valor vacío "" la Polaroid saldrá negra
+    video: "LdzSFBtqLks",
+    p1: t.p1, 
+    p2: t.p2
   });
 }

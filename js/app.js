@@ -2,18 +2,33 @@ const PER_PAGE = 8;
 const TOTAL_PAGES = Math.ceil(objetos.length / PER_PAGE);
 let currentPage = 0;
 
+// 🖼️ Helper para construir URL de imagen o dejar fondo negro si no existe
+function getFotoUrl(foto) {
+  if (!foto) return '';
+  if (foto.startsWith('http')) return foto;
+  return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${foto}`;
+}
+
 function pageItems(pageIndex){
   return objetos.slice(pageIndex*PER_PAGE, pageIndex*PER_PAGE + PER_PAGE);
 }
 
 function buildPageHTML(pageIndex){
   const items = pageItems(pageIndex);
-  const cards = items.map(o => `
-    <div class="polaroid" data-id="${o.id}">
-      <div class="shot" style="background-image:url('${o.foto}')"></div>
-      <div class="num">${o.tag}</div>
-    </div>
-  `).join('');
+  const cards = items.map(o => {
+    const imgUrl = getFotoUrl(o.foto);
+    const shotStyle = imgUrl 
+      ? `background-image:url('${imgUrl}')` 
+      : `background-color:#111;`;
+
+    return `
+      <div class="polaroid" data-id="${o.id}">
+        <div class="shot" style="${shotStyle}"></div>
+        <div class="num">${o.tag}</div>
+      </div>
+    `;
+  }).join('');
+
   return `
     <div class="home-header">
       <div class="mark">Ambar Casa Violeta Azul</div>
@@ -56,7 +71,7 @@ function turnPage(targetPage, direction){
   attachPageEvents(backSide, targetPage);
 
   leaf.style.transformOrigin = direction === 'next' ? 'left center' : 'right center';
-  leaf.classList.add('turning'); // activa preserve-3d solo mientras dura el giro
+  leaf.classList.add('turning');
 
   requestAnimationFrame(()=>{
     leaf.style.transform = direction === 'next' ? 'rotateY(-180deg)' : 'rotateY(180deg)';
@@ -69,21 +84,19 @@ function turnPage(targetPage, direction){
     backSide.innerHTML = '';
     leaf.style.transition = 'none';
     leaf.style.transform = 'rotateY(0deg)';
-    leaf.classList.remove('turning'); // vuelve a scroll normal, sin contexto 3D
-    // forzar reflow antes de restaurar la transición
+    leaf.classList.remove('turning');
     void leaf.offsetHeight;
     leaf.style.transition = '';
   }, 1120);
 }
 
-/* ---------- detalle con zoom ---------- */
+/* ---------- Detalle con zoom ---------- */
 const overlay = document.getElementById('overlay');
 const mediaBox = document.getElementById('mediaBox');
 const detailContent = document.getElementById('detailContent');
 const closeBtn = document.getElementById('closeBtn');
 const stage = document.getElementById('stage');
 let lastRect = null;
-
 let lastScale = null;
 
 function openDetail(id, sourceEl){
@@ -111,8 +124,6 @@ function openDetail(id, sourceEl){
     <p class="body">${o.p2}</p>
   `;
 
-  // el overlay ahora es 100% ancho / 100vh alto por CSS (siempre correcto, sin
-  // depender de medidas en JS); solo calculamos desde dónde "nace" el zoom.
   const scaleX = rect.width / stageRect.width;
   const scaleY = rect.height / window.innerHeight;
   const translateX = rect.left - stageRect.left;
