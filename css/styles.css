@@ -50,6 +50,8 @@ button:focus-visible, [tabindex="-1"]:focus-visible {
   transition: transform var(--page-turn-duration) cubic-bezier(.45, .05, .35, 1);
 }
 .leaf.turning { transform-style: preserve-3d; }
+.leaf:not(.turning) .side.back { visibility: hidden; }
+.leaf.turning .side.back { visibility: visible; }
 .leaf .side {
   position: absolute;
   inset: 0;
@@ -68,6 +70,8 @@ button:focus-visible, [tabindex="-1"]:focus-visible {
 }
 .leaf .side.back { transform: rotateY(180deg); }
 .leaf.turning .side { pointer-events: none; }
+.leaf.turning .side.front { z-index: 1; }
+.leaf.turning .side.back { z-index: 2; }
 .leaf.turning::after {
   content: "";
   position: absolute;
@@ -211,7 +215,7 @@ button:focus-visible, [tabindex="-1"]:focus-visible {
   touch-action: pan-y;
   background: var(--paper);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
-  transition: transform .45s cubic-bezier(.2, .7, .2, 1);
+  transition: transform .62s cubic-bezier(.22, .75, .22, 1);
   transform-origin: top left;
   will-change: transform;
   z-index: 100;
@@ -219,6 +223,21 @@ button:focus-visible, [tabindex="-1"]:focus-visible {
   scrollbar-gutter: stable;
 }
 .detail-overlay.show { display: block; }
+.detail-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 120;
+  pointer-events: none;
+  opacity: 0;
+  background-color: #111;
+  background-image: var(--piece-photo, none);
+  background-position: center;
+  background-size: cover;
+  transition: opacity .2s ease;
+}
+.detail-overlay.opening-from-polaroid::after,
+.detail-overlay.closing-to-polaroid::after { opacity: 1; }
 .overlay-close {
   position: absolute;
   top: max(14px, env(safe-area-inset-top));
@@ -244,10 +263,7 @@ button:focus-visible, [tabindex="-1"]:focus-visible {
 .media-placeholder {
   width: 100%;
   height: 100%;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  padding: 20px;
+  background: #000;
 }
 .play {
   position: absolute;
@@ -274,7 +290,7 @@ button:focus-visible, [tabindex="-1"]:focus-visible {
 }
 .play:hover { background: #fff; }
 
-.content { padding: 22px 24px max(50px, env(safe-area-inset-bottom)); opacity: 0; transition: opacity .3s ease; }
+.content { padding: 22px 24px max(50px, env(safe-area-inset-bottom)); opacity: 0; transition: opacity .24s ease; }
 .content.show { opacity: 1; }
 .eyebrow-row { display: flex; gap: 12px; font-size: 12px; color: var(--brass); margin-bottom: 10px; flex-wrap: wrap; }
 .eyebrow-row span:not(:last-child) { border-right: 1px solid var(--line); padding-right: 12px; }
@@ -286,7 +302,7 @@ h2.title { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size
 p.body { font-size: 14.5px; line-height: 1.6; margin: 0 0 14px; max-width: 55ch; }
 
 /* ---------- CÓDIGO QR ---------- */
-.qr-box { display: flex; flex-direction: column; align-items: flex-end; margin-top: 20px; }
+.qr-box { display: flex; flex-direction: column; align-items: flex-end; margin-top: 24px; }
 .qr-box img { width: 90px; height: 90px; background: #fff; padding: 6px; border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 4px 10px rgba(0, 0, 0, .1); }
 .qr-box span { font-size: 10px; color: var(--brass); margin-top: 4px; font-family: 'Work Sans', sans-serif; letter-spacing: .05em; }
 
