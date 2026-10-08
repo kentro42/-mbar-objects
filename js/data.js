@@ -1,5 +1,7 @@
 const CLOUD_NAME = "genszcmv";
 
+// Registros fuente disponibles. No se repiten automáticamente para completar
+// una cantidad arbitraria: cada ficha visible debe representar una pieza real.
 const plantillas = [
   {title:"Singer de pedal, modelo 66", subtitle:"La pieza que abrió el taller de la abuela", categoria:"Máquina de coser", origen:"Alemania", material:"Hierro fundido y roble", uso:"Confección textil", year:"1932", p1:"Esta máquina llegó al local hace más de una década, traída por una clienta que la heredó de su abuela.", p2:"Toca el video para verla en movimiento."},
   {title:"Reloj de péndulo Junghans", subtitle:"Marcó el ritmo del local por 40 años", categoria:"Reloj de pared", origen:"Alemania", material:"Nogal y latón", uso:"Cronometraje doméstico", year:"1958", p1:"Su péndulo de latón todavía marca la hora con precisión.", p2:"Video de ejemplo — reemplazar por el clip real."},
@@ -13,27 +15,26 @@ const plantillas = [
   {title:"Máquina registradora National", subtitle:"Sonaba en cada venta del mostrador", categoria:"Caja registradora", origen:"Estados Unidos", material:"Hierro y níquel", uso:"Cobro en tienda", year:"1915", p1:"Su timbre metálico anunciaba cada venta del día.", p2:"Video de ejemplo — reemplazar por el clip real."}
 ];
 
-const objetos = [];
-for(let i=0; i<15; i++){
-  const t = plantillas[i % plantillas.length];
-  const num = String(i+1).padStart(3,'0');
-  objetos.push({
-    id: i+1, 
+const objetos = plantillas.map((t, index) => {
+  const num = String(index + 1).padStart(3, '0');
+  return {
+    id: index + 1,
     tag: `Pieza ${num}`,
-    title: t.title, 
-    subtitle: t.subtitle, 
-    categoria: t.categoria, 
+    title: t.title,
+    subtitle: t.subtitle,
+    categoria: t.categoria,
     origen: t.origen,
-    material: t.material, 
-    uso: t.uso, 
+    material: t.material,
+    uso: t.uso,
     year: `Circa ${t.year}`,
-    procedencia: "Colección del local", 
+    procedencia: "Colección del local",
     estado: "Exhibición",
-    foto: `https://picsum.photos/seed/obj${i+1}/400/400`, // 👈 Si dejas este valor vacío "" la Polaroid saldrá negra
+    foto: `https://picsum.photos/seed/obj${index + 1}/400/400`,
     video: "LdzSFBtqLks",
-    p1: t.p1, 
+    p1: t.p1,
     p2: t.p2
-  });
-}
+  };
+});
+
+// La fotografía propia de la primera ficha sustituye el recurso de muestra.
 objetos[0].foto = "80e09bd1d6fec9dab31e192f8f0c9004.jpg";
-objetos[0].video = "LdzSFBtqLks";
