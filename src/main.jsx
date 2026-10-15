@@ -63,7 +63,7 @@ function AlbumPage({ page, onOpenPiece, onTurnPage, isPageTurning }) {
     <div className="page-content" data-page={page}>
       <header className="album-header">
         <div className="brand-mark" aria-label="Ámbar Casa Violeta Azul">
-          <span className="brand-mark__ornament" aria-hidden="true">✳</span>
+          <span className="brand-mark__ornament" aria-hidden="true">📷</span>
           <span>Ámbar · Casa Violeta Azul</span>
         </div>
         <p className="eyebrow">Cuaderno de cosas queridas <span>·</span> desde la casa</p>
