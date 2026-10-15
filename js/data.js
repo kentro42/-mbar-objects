@@ -1,4 +1,4 @@
-const CLOUD_NAME = "genszcmv";
+export const CLOUD_NAME = "genszcmv";
 
 // Registros fuente disponibles. No se repiten automáticamente para completar
 // una cantidad arbitraria: cada ficha visible debe representar una pieza real.
@@ -15,7 +15,7 @@ const plantillas = [
   {title:"Máquina registradora National", subtitle:"Sonaba en cada venta del mostrador", categoria:"Caja registradora", origen:"Estados Unidos", material:"Hierro y níquel", uso:"Cobro en tienda", year:"1915", p1:"Su timbre metálico anunciaba cada venta del día.", p2:"Video de ejemplo — reemplazar por el clip real."}
 ];
 
-const objetos = plantillas.map((t, index) => {
+export const objetos = plantillas.map((t, index) => {
   const num = String(index + 1).padStart(3, '0');
   return {
     id: index + 1,
@@ -29,7 +29,7 @@ const objetos = plantillas.map((t, index) => {
     year: `año ${t.year}`,
     procedencia: "Colección del local",
     estado: "Exhibición",
-    foto: `https://picsum.photos/seed/obj${index + 1}/400/400`,
+    foto: t.foto || '',
     video: t.video || "",
     p1: t.p1,
     p2: t.p2
