@@ -24,22 +24,37 @@ export function nextPosition(album, screen, page, mode, direction) {
 
 export function getSpineLeft(screen, mode, stageWidth) {
   const spineWidth = mode === 'desktop' ? 36 : 40;
-  if (screen === 'front-cover') return '0px';
-  if (screen === 'back-cover') return `${Math.max(0, stageWidth - spineWidth)}px`;
+  if (screen === 'front-cover') return `${Math.max(0, mode === 'desktop' ? stageWidth * 0.25 - spineWidth / 2 : 0)}px`;
+  if (screen === 'back-cover') return `${Math.max(0, mode === 'desktop' ? stageWidth * 0.75 - spineWidth / 2 : stageWidth - spineWidth)}px`;
   return mode === 'desktop' ? `${Math.max(0, stageWidth / 2 - spineWidth / 2)}px` : '0px';
+}
+
+export function getTurnLeafLayout(pending) {
+  if (pending.from.screen !== 'pages' || pending.to.screen !== 'pages') {
+    return { variant: 'book', left: '0px', width: '100%', hinge: pending.from.screen === 'back-cover' ? '100%' : '0%' };
+  }
+
+  if (pending.mode === 'desktop') {
+    const advancing = pending.direction === 'next';
+    return {
+      variant: 'page',
+      left: advancing ? '50%' : '0px',
+      width: '50%',
+      hinge: advancing ? '0%' : '100%'
+    };
+  }
+
+  return { variant: 'page', left: '40px', width: 'calc(100% - 40px)', hinge: '0%' };
 }
 
 export function createTurnAnimations({ node, spineNode, pending, onFinish }) {
   const duration = pending.reduced ? FADE_MS : TURN_MS;
-  const angle = pending.direction === 'next' ? -180 : 180;
-  const horizontalShift = pending.from.screen === 'pages'
-    ? (pending.direction === 'next' ? '-1.4%' : '1.4%')
-    : (pending.direction === 'next' ? '1.4%' : '-1.4%');
+  const angle = pending.direction === 'next' || pending.mode === 'mobile' ? -180 : 180;
   const keyframes = pending.reduced
     ? [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'none' }]
     : [
         { opacity: 1, transform: 'translateX(0) rotateY(0deg)' },
-        { opacity: 1, transform: `translateX(${horizontalShift}) rotateY(${angle * 0.56}deg)` },
+        { opacity: 1, transform: `translateX(0) rotateY(${angle * 0.56}deg)` },
         { opacity: 1, transform: `translateX(0) rotateY(${angle}deg)` }
       ];
   const animation = node.animate(keyframes, { duration, easing: 'ease-in-out', fill: 'both' });

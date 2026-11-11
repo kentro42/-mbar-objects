@@ -23,7 +23,6 @@ export default function usePageTurnGesture({ turnRef, stageRef, startTurn, rever
     if (turnRef.current) {
       event.preventDefault();
       consumeClickRef.current = true;
-      reverseTurn();
       scheduleClickReset(400);
       return;
     }
@@ -43,7 +42,7 @@ export default function usePageTurnGesture({ turnRef, stageRef, startTurn, rever
       started: false
     };
     try { stageRef.current.setPointerCapture(event.pointerId); } catch { /* Optional on older browsers. */ }
-  }, [reverseTurn, scheduleClickReset, stageRef, turnRef]);
+  }, [scheduleClickReset, stageRef, turnRef]);
 
   const onPointerMove = useCallback(event => {
     const gesture = pointerRef.current;

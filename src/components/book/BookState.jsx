@@ -4,7 +4,7 @@ import BookPage from './BookPage.jsx';
 
 export default function BookState({
   album, albums, screen, page, mode, onOpenPiece, onOpenCover, onSelectAlbum,
-  ariaHidden = false, inert = false, isPageTurning = false, layer = 'resting'
+  ariaHidden = false, inert = false, isPageTurning = false, layer = 'resting', pageIndexes
 }) {
   if (screen !== 'pages') {
     const side = screen === 'back-cover' ? 'back' : 'front';
@@ -16,10 +16,12 @@ export default function BookState({
   }
 
   const desktop = mode === 'desktop';
+  const leftPage = pageIndexes?.left ?? page;
+  const rightPage = pageIndexes?.right ?? page + 1;
   return (
-    <div className={`book-state book-state--spread${desktop ? ' book-state--desktop' : ' book-state--mobile'}`} data-book-state={layer} aria-label={`Hojas ${page + 1}${desktop ? ` y ${page + 2}` : ''}`} aria-hidden={ariaHidden} inert={inert}>
-      <BookPage album={album} pageIndex={page} onOpenPiece={onOpenPiece} isPageTurning={isPageTurning} label="spread-page spread-page--left" />
-      {desktop && <BookPage album={album} pageIndex={page + 1} onOpenPiece={onOpenPiece} isPageTurning={isPageTurning} label="spread-page spread-page--right" />}
+    <div className={`book-state book-state--spread${desktop ? ' book-state--desktop' : ' book-state--mobile'}`} data-book-state={layer} aria-label={`Hojas ${leftPage + 1}${desktop ? ` y ${rightPage + 1}` : ''}`} aria-hidden={ariaHidden} inert={inert}>
+      <BookPage album={album} pageIndex={leftPage} onOpenPiece={onOpenPiece} isPageTurning={isPageTurning} label="spread-page spread-page--left" />
+      {desktop && <BookPage album={album} pageIndex={rightPage} onOpenPiece={onOpenPiece} isPageTurning={isPageTurning} label="spread-page spread-page--right" />}
     </div>
   );
 }

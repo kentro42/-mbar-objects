@@ -1,15 +1,10 @@
 import React from 'react';
 import BinderRings from './BinderRings.jsx';
 import BookState from './BookState.jsx';
+import BookPage from './BookPage.jsx';
 import PageNavigation from './PageNavigation.jsx';
 import PieceDetail from '../pieces/PieceDetail.jsx';
-
-function spineLeft(screen, mode) {
-  const width = mode === 'desktop' ? 36 : 40;
-  if (screen === 'front-cover') return '0px';
-  if (screen === 'back-cover') return `calc(100% - ${width}px)`;
-  return mode === 'desktop' ? `calc(50% - ${width / 2}px)` : '0px';
-}
+import { getSpineLeft, getTurnLeafLayout } from '../../utils/pageTurn.js';
 
 export default function AlbumLayout({
   stageRef, turnLeafRef, spineRef, album, albums, mode, screen, page, turn, selectedItem,
@@ -21,8 +16,24 @@ export default function AlbumLayout({
   const pageCount = Math.max(1, Math.ceil(album.pieces.length / album.itemsPerPage));
   const from = turn?.from || { screen, page, albumId: album.id };
   const to = turn?.to || from;
-  const restingOrUnderlay = turn ? to : from;
-  const spineFrom = spineLeft(from.screen, displayMode);
+  const isSpreadTurn = turn?.from.screen === 'pages' && turn?.to.screen === 'pages';
+  const restingOrUnderlay = turn
+    ? (isSpreadTurn && displayMode === 'mobile' && !turn.reduced ? from : to)
+    : from;
+  const stageWidth = stageRef.current?.clientWidth || 0;
+  const spineFrom = getSpineLeft(from.screen, displayMode, stageWidth);
+  const leafLayout = turn ? getTurnLeafLayout(turn) : null;
+  const turningPageFrom = turn && displayMode === 'desktop'
+    ? (turn.direction === 'next' ? turn.from.page + 1 : turn.from.page)
+    : turn?.from.page;
+  const turningPageTo = turn && displayMode === 'desktop'
+    ? (turn.direction === 'next' ? turn.to.page : turn.to.page + 1)
+    : turn?.to.page;
+  const underlayPageIndexes = isSpreadTurn && displayMode === 'desktop' && !turn.reduced
+    ? (turn.direction === 'next'
+      ? { left: turn.from.page, right: turn.to.page + 1 }
+      : { left: turn.to.page, right: turn.from.page + 1 })
+    : undefined;
 
   const renderState = (position, options = {}) => (
     <BookState
@@ -38,6 +49,7 @@ export default function AlbumLayout({
       inert={options.inert}
       isPageTurning={Boolean(turn)}
       layer={options.layer}
+      pageIndexes={options.pageIndexes}
     />
   );
 
@@ -61,14 +73,22 @@ export default function AlbumLayout({
         onPointerCancelCapture={onPointerCancel}
         onClickCapture={onClickCapture}
       >
-        {renderState(restingOrUnderlay, { hidden: Boolean(turn || selectedItem), inert: Boolean(turn || selectedItem), layer: turn ? 'underlay' : 'resting' })}
+        {renderState(restingOrUnderlay, {
+          hidden: Boolean(turn || selectedItem),
+          inert: Boolean(turn || selectedItem),
+          layer: turn ? 'underlay' : 'resting',
+          pageIndexes: underlayPageIndexes
+        })}
 
         {turn && (
           <div
-            className={`turn-leaf${turn.reduced ? ' turn-leaf--fade' : ''}`}
+            className={`turn-leaf${isSpreadTurn ? ' turn-leaf--page' : ' turn-leaf--book'}${turn.reduced ? ' turn-leaf--fade' : ''}`}
             ref={turnLeafRef}
-            style={{ '--hinge-x': hinge }}
+            style={isSpreadTurn
+              ? { left: leafLayout.left, width: leafLayout.width, '--hinge-x': leafLayout.hinge }
+              : { '--hinge-x': hinge }}
             data-turn-id={turn.id}
+            data-direction={turn.direction}
             data-reversing={String(turn.reversing)}
             data-from-screen={turn.from.screen}
             data-from-page={turn.from.page}
@@ -77,8 +97,21 @@ export default function AlbumLayout({
             aria-hidden="true"
             inert
           >
-            <div className="turn-leaf__face turn-leaf__face--front">{renderState(from, { hidden: true, inert: true, layer: 'front' })}</div>
-            <div className="turn-leaf__face turn-leaf__face--back">{renderState(to, { hidden: true, inert: true, layer: 'back' })}</div>
+            {isSpreadTurn ? (
+              <>
+                <div className="turn-leaf__face turn-leaf__face--front">
+                  <BookPage album={album} pageIndex={turningPageFrom} onOpenPiece={onOpenPiece} isPageTurning label="turn-leaf__page" />
+                </div>
+                <div className="turn-leaf__face turn-leaf__face--back">
+                  <BookPage album={album} pageIndex={turningPageTo} onOpenPiece={onOpenPiece} isPageTurning label="turn-leaf__page" />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="turn-leaf__face turn-leaf__face--front">{renderState(from, { hidden: true, inert: true, layer: 'front' })}</div>
+                <div className="turn-leaf__face turn-leaf__face--back">{renderState(to, { hidden: true, inert: true, layer: 'back' })}</div>
+              </>
+            )}
           </div>
         )}
 

@@ -2,9 +2,9 @@ import React from 'react';
 
 export default function BinderRings({ screen = 'pages', mode = 'desktop', moving = false, from, nodeRef }) {
   const restingLeft = screen === 'front-cover'
-    ? '0px'
+    ? (mode === 'desktop' ? 'calc(25% - 18px)' : '0px')
     : screen === 'back-cover'
-      ? `calc(100% - ${mode === 'desktop' ? 36 : 40}px)`
+      ? (mode === 'desktop' ? 'calc(75% - 18px)' : 'calc(100% - 40px)')
       : mode === 'desktop' ? 'calc(50% - 18px)' : '0px';
   const style = moving
     ? { left: from }

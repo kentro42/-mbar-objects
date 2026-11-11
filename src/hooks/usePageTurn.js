@@ -143,12 +143,10 @@ export default function usePageTurn({ album, mode, screen, page, stageRef, spine
   }, []);
 
   const navigate = useCallback(direction => {
-    if (turnRef.current) {
-      reverseTurn();
-      return;
-    }
+    if (turnRef.current) return false;
     startTurn(direction);
-  }, [reverseTurn, startTurn]);
+    return true;
+  }, [startTurn]);
 
   useLayoutEffect(() => {
     const pending = turnRef.current;
