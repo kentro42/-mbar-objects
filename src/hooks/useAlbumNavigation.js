@@ -201,8 +201,6 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
   useAlbumKeyboard({
     selectedItem,
     navigate: pageTurn.navigate,
-    reverseTurn: pageTurn.reverseTurn,
-    turningRef: pageTurn.turningRef,
     animateDetailClose
   });
 

@@ -46,7 +46,7 @@ export function getPageForPiece(album, item, mode) {
 export function readInitialRoute(albums, fallbackId) {
   const hash = window.location.hash;
   let albumId = fallbackId;
-  let section = 'pages';
+  let section = 'front-cover';
   let page = 0;
   let itemId = null;
   let coverSide = null;
@@ -54,7 +54,10 @@ export function readInitialRoute(albums, fallbackId) {
   const modern = hash.match(/^#album\/([^/]+)\/(pagina\/(\d+)|pieza\/([^/]+)|(portada|contraportada))$/);
   if (modern) {
     try { albumId = decodeURIComponent(modern[1]); } catch { albumId = fallbackId; }
-    if (modern[3]) page = Math.max(0, Number(modern[3]) - 1);
+    if (modern[3]) {
+      section = 'pages';
+      page = Math.max(0, Number(modern[3]) - 1);
+    }
     if (modern[4]) itemId = decodeURIComponent(modern[4]);
     if (modern[5]) coverSide = modern[5] === 'contraportada' ? 'back' : 'front';
   } else {
@@ -63,7 +66,10 @@ export function readInitialRoute(albums, fallbackId) {
     if (legacyPiece) {
       try { itemId = decodeURIComponent(legacyPiece[1]); } catch { itemId = null; }
     }
-    if (legacyPage) page = Math.max(0, Number(legacyPage[1]) - 1);
+    if (legacyPage) {
+      section = 'pages';
+      page = Math.max(0, Number(legacyPage[1]) - 1);
+    }
   }
 
   const album = albums.find(entry => entry.id === albumId) || albums.find(entry => entry.id === fallbackId) || albums[0];

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default function useAlbumKeyboard({ selectedItem, navigate, reverseTurn, turningRef, animateDetailClose }) {
+export default function useAlbumKeyboard({ selectedItem, navigate, animateDetailClose }) {
   useEffect(() => {
     const onKeyDown = event => {
       if (selectedItem) {
@@ -28,16 +28,14 @@ export default function useAlbumKeyboard({ selectedItem, navigate, reverseTurn, 
       if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
       if (event.key === 'ArrowRight') {
         event.preventDefault();
-        if (turningRef.current) reverseTurn();
-        else navigate('next');
+        navigate('next');
       } else if (event.key === 'ArrowLeft') {
         event.preventDefault();
-        if (turningRef.current) reverseTurn();
-        else navigate('prev');
+        navigate('prev');
       }
     };
 
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [selectedItem, navigate, reverseTurn, turningRef, animateDetailClose]);
+  }, [selectedItem, navigate, animateDetailClose]);
 }
