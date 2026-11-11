@@ -32,6 +32,9 @@ export default function AlbumLayout({
   const coverOpening = turn?.from.screen === 'front-cover' || turn?.from.screen === 'back-cover';
   const leafFrontState = coverOpening ? from : to;
   const leafBackState = coverOpening ? to : from;
+  const coverBackPageIndex = leafBackState.screen === 'pages'
+    ? leafBackState.page + (displayMode === 'desktop' && leafLayout?.coverSide === 'back' ? 1 : 0)
+    : null;
   const underlayPageIndexes = isSpreadTurn && displayMode === 'desktop' && !turn.reduced
     ? (turn.direction === 'next'
       ? { left: turn.from.page, right: turn.to.page + 1 }
@@ -109,7 +112,11 @@ export default function AlbumLayout({
             ) : (
               <>
                 <div className="turn-leaf__face turn-leaf__face--front">{renderState(leafFrontState, { hidden: true, inert: true, layer: 'front' })}</div>
-                <div className="turn-leaf__face turn-leaf__face--back">{renderState(leafBackState, { hidden: true, inert: true, layer: 'back' })}</div>
+                <div className="turn-leaf__face turn-leaf__face--back">
+                  {displayMode === 'desktop' && leafBackState.screen === 'pages'
+                    ? <BookPage album={album} pageIndex={coverBackPageIndex} onOpenPiece={onOpenPiece} isPageTurning label="turn-leaf__page" />
+                    : renderState(leafBackState, { hidden: true, inert: true, layer: 'back' })}
+                </div>
               </>
             )}
           </div>
