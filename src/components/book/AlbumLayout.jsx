@@ -29,6 +29,9 @@ export default function AlbumLayout({
   const turningPageTo = turn && displayMode === 'desktop'
     ? (turn.direction === 'next' ? turn.to.page : turn.to.page + 1)
     : turn?.to.page;
+  const coverOpening = turn?.from.screen === 'front-cover' || turn?.from.screen === 'back-cover';
+  const leafFrontState = coverOpening ? from : to;
+  const leafBackState = coverOpening ? to : from;
   const underlayPageIndexes = isSpreadTurn && displayMode === 'desktop' && !turn.reduced
     ? (turn.direction === 'next'
       ? { left: turn.from.page, right: turn.to.page + 1 }
@@ -53,7 +56,6 @@ export default function AlbumLayout({
     />
   );
 
-  const hinge = from.screen === 'front-cover' ? '0%' : from.screen === 'back-cover' ? '100%' : displayMode === 'desktop' ? '50%' : '0%';
   const currentScreen = turn ? turn.from.screen : screen;
   const currentPage = turn ? turn.from.page : page;
 
@@ -82,11 +84,9 @@ export default function AlbumLayout({
 
         {turn && (
           <div
-            className={`turn-leaf${isSpreadTurn ? ' turn-leaf--page' : ' turn-leaf--book'}${turn.reduced ? ' turn-leaf--fade' : ''}`}
+            className={`turn-leaf turn-leaf--${leafLayout.variant}${leafLayout.coverSide ? ` turn-leaf--cover-${leafLayout.coverSide}` : ''}${turn.reduced ? ' turn-leaf--fade' : ''}`}
             ref={turnLeafRef}
-            style={isSpreadTurn
-              ? { left: leafLayout.left, width: leafLayout.width, '--hinge-x': leafLayout.hinge }
-              : { '--hinge-x': hinge }}
+            style={{ left: leafLayout.left, width: leafLayout.width, '--hinge-x': leafLayout.hinge }}
             data-turn-id={turn.id}
             data-direction={turn.direction}
             data-reversing={String(turn.reversing)}
@@ -108,8 +108,8 @@ export default function AlbumLayout({
               </>
             ) : (
               <>
-                <div className="turn-leaf__face turn-leaf__face--front">{renderState(from, { hidden: true, inert: true, layer: 'front' })}</div>
-                <div className="turn-leaf__face turn-leaf__face--back">{renderState(to, { hidden: true, inert: true, layer: 'back' })}</div>
+                <div className="turn-leaf__face turn-leaf__face--front">{renderState(leafFrontState, { hidden: true, inert: true, layer: 'front' })}</div>
+                <div className="turn-leaf__face turn-leaf__face--back">{renderState(leafBackState, { hidden: true, inert: true, layer: 'back' })}</div>
               </>
             )}
           </div>

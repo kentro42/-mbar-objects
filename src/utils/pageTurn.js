@@ -31,7 +31,13 @@ export function getSpineLeft(screen, mode, stageWidth) {
 
 export function getTurnLeafLayout(pending) {
   if (pending.from.screen !== 'pages' || pending.to.screen !== 'pages') {
-    return { variant: 'book', left: '0px', width: '100%', hinge: pending.from.screen === 'back-cover' ? '100%' : '0%' };
+    const coverSide = pending.from.screen === 'back-cover' || pending.to.screen === 'back-cover'
+      ? 'back'
+      : 'front';
+    const hinge = pending.mode === 'desktop'
+      ? (coverSide === 'front' ? '25%' : '75%')
+      : (coverSide === 'front' ? '0%' : '100%');
+    return { variant: 'book', coverSide, left: '0px', width: '100%', hinge };
   }
 
   if (pending.mode === 'desktop') {
@@ -49,14 +55,41 @@ export function getTurnLeafLayout(pending) {
 
 export function createTurnAnimations({ node, spineNode, pending, onFinish }) {
   const duration = pending.reduced ? FADE_MS : TURN_MS;
+  const isCoverTurn = pending.from.screen !== 'pages' || pending.to.screen !== 'pages';
+  const openFront = pending.from.screen === 'front-cover';
+  const closeFront = pending.to.screen === 'front-cover';
+  const openBack = pending.from.screen === 'back-cover';
+  const sign = openFront || closeFront ? -1 : 1;
+  const coverOpening = openFront || openBack;
+  const coverShift = pending.mode === 'desktop'
+    ? (openFront || closeFront ? 1 : -1) * 25
+    : 0;
+  const coverFrames = coverOpening
+    ? [
+        ['translateX(0%) rotateY(0deg)', 0.04, 0.04],
+        [`translateX(${coverShift / 2}%) rotateY(${sign * 90}deg)`, 0.3, 0.36],
+        [`translateX(${coverShift}%) rotateY(${sign * 180}deg)`, 0.08, 0.08]
+      ]
+    : [
+        [`translateX(${coverShift}%) rotateY(${sign * 180}deg)`, 0.08, 0.08],
+        [`translateX(${coverShift / 2}%) rotateY(${sign * 90}deg)`, 0.3, 0.36],
+        ['translateX(0%) rotateY(0deg)', 0.04, 0.04]
+      ];
   const angle = pending.direction === 'next' || pending.mode === 'mobile' ? -180 : 180;
+  const pageFrames = [
+    ['translateX(0) rotateY(0deg)', 0.04, 0.04],
+    [`translateX(0) rotateY(${angle * 0.56}deg)`, 0.3, 0.36],
+    [`translateX(0) rotateY(${angle}deg)`, 0.08, 0.08]
+  ];
+  const frames = isCoverTurn ? coverFrames : pageFrames;
   const keyframes = pending.reduced
     ? [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'none' }]
-    : [
-        { opacity: 1, transform: 'translateX(0) rotateY(0deg)' },
-        { opacity: 1, transform: `translateX(0) rotateY(${angle * 0.56}deg)` },
-        { opacity: 1, transform: `translateX(0) rotateY(${angle}deg)` }
-      ];
+    : frames.map(([transform, shadow, light]) => ({
+        opacity: 1,
+        transform,
+        '--turn-shadow-opacity': shadow,
+        '--turn-light-opacity': light
+      }));
   const animation = node.animate(keyframes, { duration, easing: 'ease-in-out', fill: 'both' });
   const spineAnimation = spineNode?.animate(
     [{ left: pending.spineFrom }, { left: pending.spineTo }],
