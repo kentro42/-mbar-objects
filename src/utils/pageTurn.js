@@ -34,9 +34,16 @@ export function getTurnLeafLayout(pending) {
     const coverSide = pending.from.screen === 'back-cover' || pending.to.screen === 'back-cover'
       ? 'back'
       : 'front';
-    const hinge = pending.mode === 'desktop'
-      ? (coverSide === 'front' ? '25%' : '75%')
-      : (coverSide === 'front' ? '0%' : '100%');
+    if (pending.mode === 'desktop') {
+      return {
+        variant: 'book',
+        coverSide,
+        left: '25%',
+        width: '50%',
+        hinge: coverSide === 'front' ? '0%' : '100%'
+      };
+    }
+    const hinge = coverSide === 'front' ? '0%' : '100%';
     return { variant: 'book', coverSide, left: '0px', width: '100%', hinge };
   }
 
@@ -62,7 +69,7 @@ export function createTurnAnimations({ node, spineNode, pending, onFinish }) {
   const sign = openFront || closeFront ? -1 : 1;
   const coverOpening = openFront || openBack;
   const coverShift = pending.mode === 'desktop'
-    ? (openFront || closeFront ? 1 : -1) * 25
+    ? (openFront || closeFront ? 1 : -1) * 50
     : 0;
   const coverFrames = coverOpening
     ? [
