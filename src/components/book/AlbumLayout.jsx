@@ -17,9 +17,7 @@ export default function AlbumLayout({
   const from = turn?.from || { screen, page, albumId: album.id };
   const to = turn?.to || from;
   const isSpreadTurn = turn?.from.screen === 'pages' && turn?.to.screen === 'pages';
-  const restingOrUnderlay = turn
-    ? (isSpreadTurn && displayMode === 'mobile' && !turn.reduced ? from : to)
-    : from;
+  const restingOrUnderlay = turn ? to : from;
   const stageWidth = stageRef.current?.clientWidth || 0;
   const spineFrom = getSpineLeft(from.screen, displayMode, stageWidth);
   const leafLayout = turn ? getTurnLeafLayout(turn) : null;
