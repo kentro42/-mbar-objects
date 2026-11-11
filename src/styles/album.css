@@ -15,6 +15,8 @@
   --story: 'IM Fell English', Georgia, serif;
   --label: 'DM Mono', monospace;
   --caption-height: 44px;
+  --mobile-spine-width: 40px;
+  --mobile-ring-axis: 20px;
   font-family: var(--story);
   color: var(--ink);
   background: var(--linen);
@@ -214,9 +216,9 @@ button:focus-visible, select:focus-visible { outline: 2px dashed var(--rust); ou
   .stage { width: 100%; height: 100dvh; min-height: 100dvh; border: 0; border-radius: 0; box-shadow: none; }
   .stage--mobile .book-state--cover .book-cover { left: 0; width: 100%; }
   .stage--mobile .book-state--mobile { gap: 0; }
-  .stage--mobile .book-state--mobile .spread-page--left { flex: 1 1 0; width: auto; margin-left: 40px; border: 0; box-shadow: none; }
+  .stage--mobile .book-state--mobile .spread-page--left { flex: 1 1 0; width: auto; margin-left: var(--mobile-spine-width); border: 0; box-shadow: none; }
   .stage--mobile .spread-page--right { display: none; }
-  .stage--mobile .book-spine { width: 40px; }
+  .stage--mobile .book-spine { width: var(--mobile-spine-width); }
   .stage--mobile .spine-label { width: 32px; font-size: 10px; }
   .stage--mobile .binder-rings span { width: 23px; height: 14px; }
   .stage--mobile .spread-page--left .page-content { padding: 22px 20px 82px 13px; }
@@ -229,11 +231,13 @@ button:focus-visible, select:focus-visible { outline: 2px dashed var(--rust); ou
   .stage--mobile .book-cover__inner { min-height: 65%; padding: 35px 22px; }
   .stage--mobile .turn-leaf--book { transform-origin: var(--hinge-x,0%) center; }
   .stage--mobile .turn-leaf--page { transform-origin: var(--hinge-x,0%) center; }
+  .stage--mobile .turn-leaf--page .turn-leaf__page { width: calc(100% - var(--mobile-ring-axis)); margin-left: var(--mobile-ring-axis); }
   .stage--mobile .turn-leaf--fade { transform-origin: center; }
   .stage--mobile .turn-leaf--book .turn-leaf__face:has(.book-state--cover)::before,
   .stage--mobile .turn-leaf--book .turn-leaf__face:has(.book-state--cover)::after { right: 0; left: 0; }
   .stage--mobile .page-navigation { padding: 9px 50px max(12px,env(safe-area-inset-bottom)); }
-  .stage--mobile .page-navigation button { font-size: 18px; }
+  .stage--mobile .page-navigation button { font-size: 18px; touch-action: manipulation; }
+  .stage--mobile .polaroid { touch-action: pan-y; }
   .stage--mobile .detail-toolbar { padding: max(12px,env(safe-area-inset-top)) 17px 11px; }
   .stage--mobile .piece-media, .stage--mobile .piece-story { width: calc(100% - 34px); }
   .stage--mobile .piece-media { height: clamp(170px,29vh,250px); }

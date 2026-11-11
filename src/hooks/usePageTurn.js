@@ -92,6 +92,7 @@ export default function usePageTurn({ album, mode, screen, page, stageRef, spine
       reduced,
       spineFrom: getSpineLeft(screen, mode, stageWidth),
       spineTo: getSpineLeft(destination.screen, mode, stageWidth),
+      stageWidth,
       dragging,
       reversing: false,
       progress: 0

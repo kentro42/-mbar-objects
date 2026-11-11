@@ -28,7 +28,7 @@ export default function usePageTurnGesture({ turnRef, stageRef, startTurn, rever
     }
     if (event.button !== 0 || REDUCED_MOTION.matches) return;
     const target = event.target instanceof Element ? event.target : null;
-    if (!target || target.closest('button, select, input, textarea, a, iframe, .polaroid, .detail-sheet')) return;
+    if (!target || target.closest('button:not(.polaroid), select, input, textarea, a, iframe, .detail-sheet')) return;
     const surface = target.closest('.book-state--spread, .book-cover');
     if (!surface || !stageRef.current) return;
     const bounds = stageRef.current.getBoundingClientRect();
@@ -41,7 +41,6 @@ export default function usePageTurnGesture({ turnRef, stageRef, startTurn, rever
       turnId: null,
       started: false
     };
-    try { stageRef.current.setPointerCapture(event.pointerId); } catch { /* Optional on older browsers. */ }
   }, [scheduleClickReset, stageRef, turnRef]);
 
   const onPointerMove = useCallback(event => {
@@ -56,11 +55,12 @@ export default function usePageTurnGesture({ turnRef, stageRef, startTurn, rever
       gesture.turnId = turnRef.current?.id ?? null;
       if (!gesture.started) return;
       consumeClickRef.current = true;
+      try { stageRef.current?.setPointerCapture(event.pointerId); } catch { /* Optional on older browsers. */ }
     }
     event.preventDefault();
     const span = Math.max(120, gesture.width * 0.48);
     updateProgress(Math.min(1, Math.abs(dx) / span));
-  }, [startTurn, turnRef, updateProgress]);
+  }, [stageRef, startTurn, turnRef, updateProgress]);
 
   const onPointerUp = useCallback(event => {
     const gesture = pointerRef.current;
@@ -75,8 +75,12 @@ export default function usePageTurnGesture({ turnRef, stageRef, startTurn, rever
     const gesture = pointerRef.current;
     if (!gesture || gesture.id !== event.pointerId) return;
     pointerRef.current = null;
-    if (gesture.started) reverseTurn();
-  }, [reverseTurn]);
+    if (gesture.started) {
+      consumeClickRef.current = true;
+      reverseTurn();
+      scheduleClickReset(350);
+    }
+  }, [reverseTurn, scheduleClickReset]);
 
   const onClickCapture = useCallback(event => {
     if (!consumeClickRef.current) return;

@@ -4,6 +4,8 @@ export const TURN_MS = 620;
 export const FADE_MS = 180;
 export const DRAG_THRESHOLD = 9;
 export const COMMIT_THRESHOLD = 0.38;
+const MOBILE_SPINE_WIDTH = 40;
+const MOBILE_RING_AXIS = MOBILE_SPINE_WIDTH / 2;
 
 export function nextPosition(album, screen, page, mode, direction) {
   const pageCount = getPageCount(album);
@@ -23,7 +25,7 @@ export function nextPosition(album, screen, page, mode, direction) {
 }
 
 export function getSpineLeft(screen, mode, stageWidth) {
-  const spineWidth = mode === 'desktop' ? 36 : 40;
+  const spineWidth = mode === 'desktop' ? 36 : MOBILE_SPINE_WIDTH;
   if (screen === 'front-cover') return `${Math.max(0, mode === 'desktop' ? stageWidth * 0.25 - spineWidth / 2 : 0)}px`;
   if (screen === 'back-cover') return `${Math.max(0, mode === 'desktop' ? stageWidth * 0.75 - spineWidth / 2 : stageWidth - spineWidth)}px`;
   return mode === 'desktop' ? `${Math.max(0, stageWidth / 2 - spineWidth / 2)}px` : '0px';
@@ -43,7 +45,9 @@ export function getTurnLeafLayout(pending) {
         hinge: coverSide === 'front' ? '0%' : '100%'
       };
     }
-    const hinge = coverSide === 'front' ? '0%' : '100%';
+    const hinge = coverSide === 'front'
+      ? `${MOBILE_RING_AXIS}px`
+      : `calc(100% - ${MOBILE_RING_AXIS}px)`;
     return { variant: 'book', coverSide, left: '0px', width: '100%', hinge };
   }
 
@@ -57,7 +61,12 @@ export function getTurnLeafLayout(pending) {
     };
   }
 
-  return { variant: 'page', left: '40px', width: 'calc(100% - 40px)', hinge: '0%' };
+  return {
+    variant: 'page',
+    left: `${MOBILE_RING_AXIS}px`,
+    width: `calc(100% - ${MOBILE_RING_AXIS}px)`,
+    hinge: '0%'
+  };
 }
 
 export function createTurnAnimations({ node, spineNode, pending, onFinish }) {
@@ -69,20 +78,23 @@ export function createTurnAnimations({ node, spineNode, pending, onFinish }) {
   const sign = openFront || closeFront ? -1 : 1;
   const coverOpening = openFront || openBack;
   const coverShift = pending.mode === 'desktop'
-    ? (openFront || closeFront ? 1 : -1) * 50
-    : 0;
+    ? `${(openFront || closeFront ? 1 : -1) * 50}%`
+    : `${openBack || pending.to.screen === 'back-cover' ? -Math.max(0, pending.stageWidth - MOBILE_SPINE_WIDTH) : 0}px`;
+  const coverShiftHalf = pending.mode === 'desktop'
+    ? `${Number.parseFloat(coverShift) / 2}%`
+    : `${Number.parseFloat(coverShift) / 2}px`;
   const coverFrames = coverOpening
     ? [
         ['translateX(0%) rotateY(0deg)', 0.04, 0.04],
-        [`translateX(${coverShift / 2}%) rotateY(${sign * 90}deg)`, 0.3, 0.36],
-        [`translateX(${coverShift}%) rotateY(${sign * 180}deg)`, 0.08, 0.08]
+        [`translateX(${coverShiftHalf}) rotateY(${sign * 90}deg)`, 0.3, 0.36],
+        [`translateX(${coverShift}) rotateY(${sign * 180}deg)`, 0.08, 0.08]
       ]
     : [
-        [`translateX(${coverShift}%) rotateY(${sign * 180}deg)`, 0.08, 0.08],
-        [`translateX(${coverShift / 2}%) rotateY(${sign * 90}deg)`, 0.3, 0.36],
+        [`translateX(${coverShift}) rotateY(${sign * 180}deg)`, 0.08, 0.08],
+        [`translateX(${coverShiftHalf}) rotateY(${sign * 90}deg)`, 0.3, 0.36],
         ['translateX(0%) rotateY(0deg)', 0.04, 0.04]
       ];
-  const angle = pending.direction === 'next' || pending.mode === 'mobile' ? -180 : 180;
+  const angle = pending.direction === 'next' ? -180 : 180;
   const pageFrames = [
     ['translateX(0) rotateY(0deg)', 0.04, 0.04],
     [`translateX(0) rotateY(${angle * 0.56}deg)`, 0.3, 0.36],
