@@ -1,99 +1,101 @@
 import React from 'react';
 import BinderRings from './BinderRings.jsx';
-import BookCover from './BookCover.jsx';
-import BookPage from './BookPage.jsx';
+import BookState from './BookState.jsx';
 import PageNavigation from './PageNavigation.jsx';
 import PieceDetail from '../pieces/PieceDetail.jsx';
 
+function spineLeft(screen, mode) {
+  const width = mode === 'desktop' ? 36 : 40;
+  if (screen === 'front-cover') return '0px';
+  if (screen === 'back-cover') return `calc(100% - ${width}px)`;
+  return mode === 'desktop' ? `calc(50% - ${width / 2}px)` : '0px';
+}
+
 export default function AlbumLayout({
-  stageRef, album, albums, mode, screen, page, turn, selectedItem,
+  stageRef, turnLeafRef, spineRef, album, albums, mode, screen, page, turn, selectedItem,
   closingDetail, detailMotion, sourceElement, onOpenPiece, onOpenCover,
-  onSelectAlbum, onPrevious, onNext, onPieceBack, onDetailTransitionEnd
+  onSelectAlbum, onPrevious, onNext, onPieceBack, onDetailTransitionEnd,
+  onPointerDown, onPointerMove, onPointerUp, onPointerCancel, onClickCapture
 }) {
-  const desktop = mode === 'desktop';
+  const displayMode = turn?.mode || mode;
   const pageCount = Math.max(1, Math.ceil(album.pieces.length / album.itemsPerPage));
-  const isCover = screen !== 'pages';
-  const ringSide = isCover ? (screen === 'back-cover' ? 'right' : 'left') : (desktop ? 'center' : 'left');
-  const coverSide = screen === 'back-cover' ? 'back' : 'front';
+  const from = turn?.from || { screen, page, albumId: album.id };
+  const to = turn?.to || from;
+  const restingOrUnderlay = turn ? to : from;
+  const spineFrom = spineLeft(from.screen, displayMode);
 
-  const renderPage = (pageIndex, label) => (
-    <BookPage
+  const renderState = (position, options = {}) => (
+    <BookState
       album={album}
-      pageIndex={pageIndex}
-      onOpenPiece={onOpenPiece}
-      isPageTurning={Boolean(turn)}
-      label={label}
-    />
-  );
-  const renderCover = (side, inLeaf = false) => (
-    <BookCover
-      album={album}
-      side={side}
       albums={albums}
-      onOpen={onOpenCover}
+      screen={position.screen}
+      page={position.page}
+      mode={turn?.mode || mode}
+      onOpenPiece={onOpenPiece}
+      onOpenCover={onOpenCover}
       onSelectAlbum={onSelectAlbum}
-      inLeaf={inLeaf}
+      ariaHidden={options.hidden}
+      inert={options.inert}
+      isPageTurning={Boolean(turn)}
+      layer={options.layer}
     />
   );
 
-  let leafFront = null;
-  let leafBack = null;
-  if (turn) {
-    if (turn.fromScreen === 'front-cover') leafFront = renderCover('front', true);
-    else if (turn.fromScreen === 'back-cover') leafFront = renderCover('back', true);
-    else {
-      const frontIndex = turn.direction === 'next' && desktop ? turn.fromPage + 1 : turn.fromPage;
-      leafFront = renderPage(frontIndex, 'turn-leaf__content');
-    }
-
-    if (turn.toScreen === 'front-cover') leafBack = renderCover('front', true);
-    else if (turn.toScreen === 'back-cover') leafBack = renderCover('back', true);
-    else {
-      const backIndex = turn.direction === 'prev' && desktop ? turn.toPage + 1 : turn.toPage;
-      leafBack = renderPage(backIndex, 'turn-leaf__content');
-    }
-  }
+  const hinge = from.screen === 'front-cover' ? '0%' : from.screen === 'back-cover' ? '100%' : displayMode === 'desktop' ? '50%' : '0%';
+  const currentScreen = turn ? turn.from.screen : screen;
+  const currentPage = turn ? turn.from.page : page;
 
   return (
     <div className="linen-backdrop">
       <main
-        className={`stage stage--${isCover ? coverSide + '-cover' : 'open'} stage--${mode}`}
+        className={`stage stage--${currentScreen === 'pages' ? 'open' : currentScreen === 'back-cover' ? 'back-cover' : 'front-cover'} stage--${displayMode}`}
         id="stage"
         ref={stageRef}
+        style={{ '--album-cover-color': album.coverColor || '#724d43' }}
         aria-label={`Álbum ${album.location}`}
         data-album-id={album.id}
+        data-screen={currentScreen}
+        onPointerDownCapture={onPointerDown}
+        onPointerMoveCapture={onPointerMove}
+        onPointerUpCapture={onPointerUp}
+        onPointerCancelCapture={onPointerCancel}
+        onClickCapture={onClickCapture}
       >
-        <BinderRings side={ringSide} />
-
-        {isCover ? (
-          <div aria-hidden={Boolean(turn)} inert={Boolean(turn)}>{renderCover(coverSide)}</div>
-        ) : (
-          <div className={`book-spread${desktop ? ' book-spread--desktop' : ' book-spread--mobile'}`} aria-label="Libro abierto" aria-hidden={Boolean(turn || selectedItem)} inert={Boolean(turn || selectedItem)}>
-            {renderPage(page, 'spread-page spread-page--left')}
-            {desktop && renderPage(page + 1, 'spread-page spread-page--right')}
-          </div>
-        )}
+        {renderState(restingOrUnderlay, { hidden: Boolean(turn || selectedItem), inert: Boolean(turn || selectedItem), layer: turn ? 'underlay' : 'resting' })}
 
         {turn && (
           <div
-            className={`turn-leaf turn-leaf--${turn.direction}${desktop ? ' turn-leaf--desktop' : ' turn-leaf--mobile'}${turn.fromScreen === 'front-cover' ? ' turn-leaf--from-front' : ''}${turn.fromScreen === 'back-cover' ? ' turn-leaf--from-back' : ''}${turn.active ? ' turn-leaf--active' : ''}`}
-            onTransitionEnd={event => {
-              if (event.target === event.currentTarget && event.propertyName === 'transform') turn.onFinish?.();
-            }}
+            className={`turn-leaf${turn.reduced ? ' turn-leaf--fade' : ''}`}
+            ref={turnLeafRef}
+            style={{ '--hinge-x': hinge }}
+            data-turn-id={turn.id}
+            data-reversing={String(turn.reversing)}
+            data-from-screen={turn.from.screen}
+            data-from-page={turn.from.page}
+            data-to-screen={turn.to.screen}
+            data-to-page={turn.to.page}
             aria-hidden="true"
             inert
           >
-            <div className="turn-leaf__face turn-leaf__face--front">{leafFront}</div>
-            <div className="turn-leaf__face turn-leaf__face--back">{leafBack}</div>
+            <div className="turn-leaf__face turn-leaf__face--front">{renderState(from, { hidden: true, inert: true, layer: 'front' })}</div>
+            <div className="turn-leaf__face turn-leaf__face--back">{renderState(to, { hidden: true, inert: true, layer: 'back' })}</div>
           </div>
         )}
 
-        {screen === 'pages' && (
+        <BinderRings
+          screen={currentScreen}
+          mode={displayMode}
+          moving={Boolean(turn)}
+          from={turn?.spineFrom || spineFrom}
+          nodeRef={spineRef}
+        />
+
+        {currentScreen === 'pages' && !turn && (
           <PageNavigation
             album={album}
-            mode={mode}
-            screen={screen}
-            page={page}
+            mode={displayMode}
+            screen="pages"
+            page={currentPage}
             pageCount={pageCount}
             turning={Boolean(turn || selectedItem)}
             onPrevious={onPrevious}

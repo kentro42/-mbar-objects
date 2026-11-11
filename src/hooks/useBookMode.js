@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const QUERY = '(min-width: 761px)';
+// La composición depende de la orientación, no de un ancho aislado. En landscape
+// pequeño se conserva una hoja para evitar una doble página ilegible.
+const QUERY = '(orientation: landscape) and (min-width: 760px) and (min-height: 520px)';
 
 function readMode() {
   return window.matchMedia(QUERY).matches ? 'desktop' : 'mobile';

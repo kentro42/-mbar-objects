@@ -6,7 +6,11 @@ export default function BookCover({ album, side, albums, onOpen, onSelectAlbum }
   const coverImage = cover.image ? new URL(cover.image, window.location.href).href : undefined;
 
   return (
-    <section className={`book-cover book-cover--${side}`} style={{ '--cover-accent': cover.color, '--cover-image': coverImage ? `url("${coverImage}")` : undefined }} aria-label={isFront ? `Portada de ${album.location}` : `Contraportada de ${album.location}`}>
+    <section
+      className={`book-cover book-cover--${side}`}
+      style={{ '--cover-image': coverImage ? `url("${coverImage}")` : undefined }}
+      aria-label={isFront ? `Portada de ${album.location}` : `Contraportada de ${album.location}`}
+    >
       <div className="book-cover__inner">
         <span className="book-cover__brand">✳ {album.brand}</span>
         <span className="book-cover__eyebrow">{isFront ? cover.eyebrow : 'Fin del recorrido'}</span>

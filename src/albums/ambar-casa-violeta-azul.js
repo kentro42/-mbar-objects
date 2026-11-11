@@ -48,17 +48,16 @@ const album = {
   subtitle: 'Cuaderno de cosas queridas · desde la casa',
   itemsPerPage: 4,
   pieces: objetos,
+  coverColor: '#724d43',
   cover: {
     front: {
       eyebrow: 'Archivo afectivo',
       title: 'Casa Violeta Azul',
-      note: 'Objetos que guardan historias y encuentran un nuevo lugar en la casa.',
-      color: '#724d43'
+      note: 'Objetos que guardan historias y encuentran un nuevo lugar en la casa.'
     },
     back: {
       note: 'Gracias por mirar despacio y cuidar la memoria de cada objeto.',
-      signature: 'Ámbar',
-      color: '#586652'
+      signature: 'Ámbar'
     }
   }
 };
