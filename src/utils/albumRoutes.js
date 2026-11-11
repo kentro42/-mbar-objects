@@ -1,45 +1,83 @@
-import { CLOUD_NAME, objetos } from '../../js/data.js';
-
-export const PER_PAGE = 8;
-export const TOTAL_PAGES = Math.max(1, Math.ceil(objetos.length / PER_PAGE));
 export const IDENTITY_TRANSFORM = 'translate(0px, 0px) scale(1, 1)';
 export const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-export function getPhotoUrl(photo) {
+export function getPageCount(album) {
+  return Math.max(1, Math.ceil(album.pieces.length / album.itemsPerPage));
+}
+
+export function getSpreadStart(page, mode, pageCount) {
+  const safePage = Math.max(0, Math.min(pageCount - 1, Number(page) || 0));
+  return mode === 'desktop' ? Math.floor(safePage / 2) * 2 : safePage;
+}
+
+export function getPhotoUrl(photo, cloudName) {
   if (!photo) return '';
   if (/^https:\/\//i.test(photo)) return photo;
-  return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${encodeURIComponent(photo)}`;
+  if (!cloudName) return '';
+  return `https://res.cloudinary.com/${cloudName}/image/upload/${encodeURIComponent(photo)}`;
 }
 
-export function getPageUrl(page) {
-  return `${window.location.pathname}${window.location.search}#pagina-${page + 1}`;
+function routeBase(albumId) {
+  return `${window.location.pathname}${window.location.search}#album/${encodeURIComponent(albumId)}`;
 }
 
-export function getPieceUrl(item) {
-  return `${window.location.pathname}${window.location.search}#pieza-${encodeURIComponent(String(item.id))}`;
+export function getPageUrl(albumId, page) {
+  return `${routeBase(albumId)}/pagina/${page + 1}`;
 }
 
-export function getAbsolutePieceUrl(item) {
-  return new URL(getPieceUrl(item), window.location.origin).href;
+export function getCoverUrl(albumId, side) {
+  return `${routeBase(albumId)}/${side === 'back' ? 'contraportada' : 'portada'}`;
 }
 
-export function getPageForPiece(item) {
-  return Math.floor(objetos.findIndex(piece => String(piece.id) === String(item.id)) / PER_PAGE);
+export function getPieceUrl(albumId, item) {
+  return `${routeBase(albumId)}/pieza/${encodeURIComponent(String(item.id))}`;
 }
 
-export function readInitialRoute() {
-  const pieceMatch = window.location.hash.match(/^#pieza-(.+)$/);
-  if (pieceMatch) {
-    try {
-      const item = objetos.find(piece => String(piece.id) === decodeURIComponent(pieceMatch[1]));
-      if (item) return { section: 'piece', item, page: getPageForPiece(item) };
-    } catch {
-      // Un hash mal codificado no debe impedir que el álbum se abra.
+export function getAbsolutePieceUrl(albumId, item) {
+  return new URL(getPieceUrl(albumId, item), window.location.origin).href;
+}
+
+export function getPageForPiece(album, item, mode) {
+  const index = album.pieces.findIndex(piece => String(piece.id) === String(item.id));
+  const page = Math.max(0, Math.floor(index / album.itemsPerPage));
+  return getSpreadStart(page, mode, getPageCount(album));
+}
+
+export function readInitialRoute(albums, fallbackId) {
+  const hash = window.location.hash;
+  let albumId = fallbackId;
+  let section = 'pages';
+  let page = 0;
+  let itemId = null;
+  let coverSide = null;
+
+  const modern = hash.match(/^#album\/([^/]+)\/(pagina\/(\d+)|pieza\/([^/]+)|(portada|contraportada))$/);
+  if (modern) {
+    try { albumId = decodeURIComponent(modern[1]); } catch { albumId = fallbackId; }
+    if (modern[3]) page = Math.max(0, Number(modern[3]) - 1);
+    if (modern[4]) itemId = decodeURIComponent(modern[4]);
+    if (modern[5]) coverSide = modern[5] === 'contraportada' ? 'back' : 'front';
+  } else {
+    const legacyPiece = hash.match(/^#pieza-(.+)$/);
+    const legacyPage = hash.match(/^#pagina-(\d+)$/);
+    if (legacyPiece) {
+      try { itemId = decodeURIComponent(legacyPiece[1]); } catch { itemId = null; }
     }
+    if (legacyPage) page = Math.max(0, Number(legacyPage[1]) - 1);
   }
-  const pageMatch = window.location.hash.match(/^#pagina-(\d+)$/);
-  const page = pageMatch ? Number(pageMatch[1]) - 1 : 0;
-  return { section: 'album', page: Math.max(0, Math.min(TOTAL_PAGES - 1, page)) };
+
+  const album = albums.find(entry => entry.id === albumId) || albums.find(entry => entry.id === fallbackId) || albums[0];
+  if (itemId !== null) {
+    const piece = album.pieces.find(entry => String(entry.id) === String(itemId));
+    if (piece) {
+      section = 'piece';
+      page = Math.floor(album.pieces.indexOf(piece) / album.itemsPerPage);
+      itemId = piece.id;
+    } else itemId = null;
+  } else if (coverSide) section = coverSide === 'back' ? 'back-cover' : 'front-cover';
+
+  page = Math.min(page, getPageCount(album) - 1);
+  return { albumId: album.id, screen: section, section, page, itemId };
 }
 
 export function getZoomTransform(sourceElement, stageElement) {
