@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getAbsolutePieceUrl } from '../utils/albumRoutes.js';
+import { getAbsolutePieceUrl } from '../../utils/albumRoutes.js';
+import DelayedImage from '../loading/DelayedImage.jsx';
 
-export default function PieceDetail({ item, motion, closing, sourceElement, onBack, onTransitionEnd }) {
+export default function PieceDetail({ albumId, item, motion, closing, sourceElement, onBack, onTransitionEnd }) {
   const [playing, setPlaying] = useState(false);
   const headingRef = useRef(null);
   const videoId = /^[A-Za-z0-9_-]{11}$/.test(item.video || '') ? item.video : '';
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&data=${encodeURIComponent(getAbsolutePieceUrl(item))}`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&data=${encodeURIComponent(getAbsolutePieceUrl(albumId, item))}`;
+  const cardPhoto = sourceElement?.querySelector('.polaroid__photo img')?.currentSrc;
+  const imageStyle = cardPhoto ? { '--piece-photo': `url(${JSON.stringify(cardPhoto)})` } : undefined;
 
   useEffect(() => {
     headingRef.current?.focus({ preventScroll: true });
   }, [item.id]);
-
-  const cardPhoto = sourceElement?.querySelector('.polaroid__photo img')?.currentSrc;
-  const imageStyle = cardPhoto ? { '--piece-photo': `url(${JSON.stringify(cardPhoto)})` } : undefined;
 
   return (
     <section
@@ -26,9 +26,7 @@ export default function PieceDetail({ item, motion, closing, sourceElement, onBa
       tabIndex={-1}
     >
       <div className="detail-toolbar">
-        <button className="back-to-album" type="button" onClick={onBack}>
-          <span aria-hidden="true">←</span> volver al álbum
-        </button>
+        <button className="back-to-album" type="button" onClick={onBack}><span aria-hidden="true">←</span> volver al álbum</button>
         <span className="detail-toolbar__label">nota de inventario <span>✳</span></span>
       </div>
 
@@ -44,25 +42,20 @@ export default function PieceDetail({ item, motion, closing, sourceElement, onBa
             />
           ) : (
             <>
-              <img src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`} alt={`Vista previa del video de ${item.title}`} />
-              <button className="play-button" type="button" onClick={() => setPlaying(true)} aria-label={`Reproducir video de ${item.title}`}>
-                <span aria-hidden="true">▶</span>
-              </button>
+              <DelayedImage src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`} alt={`Vista previa del video de ${item.title}`} className="piece-media__image" />
+              <button className="play-button" type="button" onClick={() => setPlaying(true)} aria-label={`Reproducir video de ${item.title}`}><span aria-hidden="true">▶</span></button>
               <span className="media-caption">un pequeño recuerdo en movimiento</span>
             </>
           )
         ) : (
           <div className="empty-media" aria-label="Esta pieza todavía no tiene video">
-            <span className="empty-media__moon" aria-hidden="true">◌</span>
-            <span>un espacio en silencio</span>
+            <span className="empty-media__moon" aria-hidden="true">◌</span><span>un espacio en silencio</span>
           </div>
         )}
       </div>
 
       <article className="piece-story">
-        <div className="story-topline">
-          <span>{item.year}</span><span>{item.categoria}</span><span>{item.origen}</span>
-        </div>
+        <div className="story-topline"><span>{item.year}</span><span>{item.categoria}</span><span>{item.origen}</span></div>
         <div className="story-heading-row">
           <div>
             <p className="story-kicker">{item.tag} <span>·</span> una pieza de la casa</p>
@@ -78,15 +71,11 @@ export default function PieceDetail({ item, motion, closing, sourceElement, onBa
           <div><dt>Estado</dt><dd>{item.estado}</dd></div>
           <div><dt>Antes servía para</dt><dd>{item.uso}</dd></div>
         </dl>
-
-        <div className="handwritten-copy">
-          <p>{item.p1}</p>
-          <p>{item.p2}</p>
-        </div>
+        <div className="handwritten-copy"><p>{item.p1}</p><p>{item.p2}</p></div>
 
         <div className="story-footer">
           <div className="qr-card">
-            <img src={qrUrl} alt={`Código QR único para ${item.tag}: ${item.title}`} width="112" height="112" loading="lazy" decoding="async" />
+            <DelayedImage src={qrUrl} alt={`Código QR único para ${item.tag}: ${item.title}`} width={112} height={112} fit="contain" />
             <span>escanea para volver a esta historia</span>
           </div>
           <p className="signed-note">con cariño,<br /><span>Ámbar</span></p>

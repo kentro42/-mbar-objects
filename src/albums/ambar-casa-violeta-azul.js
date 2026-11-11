@@ -38,3 +38,29 @@ export const objetos = plantillas.map((t, index) => {
 
 // La fotografía propia de la primera ficha sustituye el recurso de muestra.
 objetos[0].foto = "80e09bd1d6fec9dab31e192f8f0c9004.jpg";
+
+const album = {
+  id: 'ambar-casa-violeta-azul',
+  cloudName: CLOUD_NAME,
+  brand: 'Ámbar',
+  location: 'Casa Violeta Azul',
+  title: 'El álbum de las piezas',
+  subtitle: 'Cuaderno de cosas queridas · desde la casa',
+  itemsPerPage: 4,
+  pieces: objetos,
+  cover: {
+    front: {
+      eyebrow: 'Archivo afectivo',
+      title: 'Casa Violeta Azul',
+      note: 'Objetos que guardan historias y encuentran un nuevo lugar en la casa.',
+      color: '#724d43'
+    },
+    back: {
+      note: 'Gracias por mirar despacio y cuidar la memoria de cada objeto.',
+      signature: 'Ámbar',
+      color: '#586652'
+    }
+  }
+};
+
+export default album;

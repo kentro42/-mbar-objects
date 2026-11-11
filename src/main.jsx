@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import AppRouter from './router/AppRouter.jsx';
-import '../css/styles.css';
+import AlbumApp from './app/AlbumApp.jsx';
+import './styles/album.css';
 
-createRoot(document.getElementById('root')).render(<AppRouter />);
+createRoot(document.getElementById('root')).render(<AlbumApp />);

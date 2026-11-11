@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
-import { TOTAL_PAGES } from '../utils/albumRoutes.js';
 
-export default function useAlbumKeyboard({ selectedItem, page, turnPage, animateDetailClose, turningRef }) {
+export default function useAlbumKeyboard({ selectedItem, navigate, turningRef, animateDetailClose }) {
   useEffect(() => {
     const onKeyDown = event => {
       if (selectedItem) {
         if (event.key === 'Escape') {
           event.preventDefault();
-          if (window.history.state?.section === 'piece') window.history.back();
+          if (window.history.state?.screen === 'piece') window.history.back();
           else animateDetailClose();
           return;
         }
@@ -25,15 +24,16 @@ export default function useAlbumKeyboard({ selectedItem, page, turnPage, animate
         }
         return;
       }
+
       if (turningRef.current || (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]'))) return;
-      if (event.key === 'ArrowRight' && page < TOTAL_PAGES - 1) {
-        event.preventDefault(); turnPage(page + 1, 'next');
-      } else if (event.key === 'ArrowLeft' && page > 0) {
-        event.preventDefault(); turnPage(page - 1, 'prev');
+      if (event.key === 'ArrowRight') {
+        event.preventDefault(); navigate('next');
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault(); navigate('prev');
       }
     };
 
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [selectedItem, page, turnPage, animateDetailClose, turningRef]);
+  }, [selectedItem, navigate, turningRef, animateDetailClose]);
 }
