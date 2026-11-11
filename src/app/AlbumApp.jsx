@@ -17,12 +17,14 @@ export default function AlbumApp() {
   return (
     <AlbumLayout
       stageRef={stageRef}
+      turnLeafRef={book.turnLeafRef}
+      spineRef={book.spineRef}
       album={book.album}
       albums={albums}
       mode={mode}
       screen={book.screen}
       page={book.page}
-      turn={book.turn ? { ...book.turn, onFinish: book.finishTurn } : null}
+      turn={book.turn}
       selectedItem={book.selectedItem}
       closingDetail={book.closingDetail}
       detailMotion={book.detailMotion}
@@ -34,6 +36,7 @@ export default function AlbumApp() {
       onNext={() => book.navigate('next')}
       onPieceBack={goBackFromPiece}
       onDetailTransitionEnd={book.onDetailTransitionEnd}
+      {...book.pointerHandlers}
     />
   );
 }

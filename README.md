@@ -24,9 +24,9 @@ Edita `src/albums/ambar-casa-violeta-azul.js`. Cada pieza del arreglo `plantilla
 
 ## Añadir otro álbum/local
 
-1. Crea `src/albums/<id-del-local>.js` con los mismos campos que el álbum actual: `id`, `brand`, `location`, `title`, `subtitle`, `itemsPerPage`, `pieces` y `cover.front`/`cover.back`.
+1. Crea `src/albums/<id-del-local>.js` con los mismos campos que el álbum actual: `id`, `brand`, `location`, `title`, `subtitle`, `itemsPerPage`, `pieces`, `coverColor` y `cover.front`/`cover.back`.
 2. Añade el nuevo módulo a `src/albums/index.js`.
-3. Pon imágenes de portada en `public/albums/<id-del-local>/` si se desean usar; si no, el diseño usa la cubierta artesanal de color configurable. Decláralas en `cover.front.image` y `cover.back.image`, por ejemplo `albums/mi-local/portada.jpg` y `albums/mi-local/contraportada.jpg` (rutas relativas a `public/`). El objeto de cada cubierta también admite su propio `color` y textos.
+3. Pon imágenes de portada en `public/albums/<id-del-local>/` si se desean usar; si no, el diseño usa la cubierta artesanal definida por `coverColor` (el mismo tono se aplica a portada y contraportada). Declara imágenes opcionales en `cover.front.image` y `cover.back.image`, por ejemplo `albums/mi-local/portada.jpg` y `albums/mi-local/contraportada.jpg` (rutas relativas a `public/`). Los objetos `front` y `back` guardan textos propios, pero no un color separado.
 
 Cada álbum mantiene su propio catálogo, rutas `#album/<id>/pagina/<n>` y `#album/<id>/pieza/<id>`, QR y cubiertas. Los enlaces antiguos `#pagina-n` y `#pieza-id` siguen aceptándose para el álbum Casa Violeta Azul.
 
@@ -38,7 +38,7 @@ Cada álbum mantiene su propio catálogo, rutas `#album/<id>/pagina/<n>` y `#alb
 - `src/components/book/`: libro, páginas, portadas, anillas y navegación.
 - `src/components/pieces/`: tarjetas, páginas de piezas y detalle.
 - `src/components/loading/`: imágenes con shimmer diferido.
-- `src/hooks/`: navegación, teclado, modo responsive y carga diferida.
+- `src/hooks/`: navegación, máquina de giro de hojas, teclado, modo por orientación y carga diferida.
 - `src/utils/albumRoutes.js`: rutas, paginación y transformaciones.
 - `src/styles/album.css`: estilos de escritorio y móvil.
 - `public/manus-routes.json`: manifiesto de ruta de la aplicación.
