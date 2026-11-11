@@ -27,7 +27,14 @@ Los datos están en `js/data.js`, dentro del arreglo `plantillas`. Cada objeto d
 
 ## Estructura principal
 
-- `src/main.jsx`: componentes React, navegación, historial, zoom y animación de giro.
+- `src/main.jsx`: punto de entrada de React.
+- `src/router/AppRouter.jsx`: coordina las rutas, vistas y eventos de navegación del álbum.
+- `src/router/useAlbumRouter.js`: historial, rutas por hash, giro de páginas y apertura de piezas.
+- `src/components/AlbumLayout.jsx`: estructura visual del libro, lomo y páginas.
+- `src/components/AlbumPage.jsx`: cuadrícula de piezas y navegación entre páginas.
+- `src/components/PieceDetail.jsx`: vista de detalle de una pieza, video y código QR.
+- `src/hooks/useAlbumKeyboard.js`: atajos de teclado y control del foco.
+- `src/utils/albumRoutes.js`: constantes y utilidades para rutas, fotos y transformaciones.
 - `css/styles.css`: estilo artesanal, adaptación a móvil y movimiento reducido.
 - `js/data.js`: catálogo editable de las piezas.
 - `index.html`: documento raíz de Vite.
