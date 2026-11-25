@@ -76,7 +76,7 @@ html { background: #e8dcc6; }
 .book-cover__inner { border-color: rgba(99,72,39,.39); background: rgba(255,249,233,.36); }
 .book-cover__brand { color: #513a24; }
 .book-cover__eyebrow { color: #76603d; }
-.book-cover__logo { border-color: rgba(255,250,237,.96); background: #e6bc3e; box-shadow: 0 4px 0 rgba(84,61,30,.15), 0 8px 18px rgba(84,61,30,.15); }
+.book-cover__logo { filter: drop-shadow(0 4px 5px rgba(84,61,30,.24)); }
 .book-cover h1 { color: #3c2b1d; }
 .book-cover__ornament span { background: var(--rust); }
 .book-cover p { color: #55432e; }
