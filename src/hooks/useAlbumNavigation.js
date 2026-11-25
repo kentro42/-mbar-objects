@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { defaultAlbumId, findAlbum } from '../albums/index.js';
 import useAlbumKeyboard from './useAlbumKeyboard.js';
+import usePieceDetail from './usePieceDetail.js';
 import usePageTurn from './usePageTurn.js';
 import {
   getPageCount,
@@ -8,8 +9,6 @@ import {
   getPageUrl,
   getPieceUrl,
   getSpreadStart,
-  getZoomTransform,
-  IDENTITY_TRANSFORM,
   readInitialRoute
 } from '../utils/albumRoutes.js';
 
@@ -37,16 +36,20 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
   const [albumId, setAlbumId] = useState(initialRoute.albumId);
   const [screen, setScreen] = useState(initialRoute.section === 'piece' ? 'pages' : initialRoute.section);
   const [page, setPage] = useState(() => getSpreadStart(initialRoute.page, mode, getPageCount(findAlbum(initialRoute.albumId))));
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [closingDetail, setClosingDetail] = useState(false);
-  const [detailMotion, setDetailMotion] = useState({ transform: IDENTITY_TRANSFORM, animated: false });
   const [pendingPieceId, setPendingPieceId] = useState(initialRoute.section === 'piece' ? String(initialRoute.itemId) : null);
   const stageAlbum = findAlbum(albumId);
   const spineRef = useRef(null);
-  const sourceElementRef = useRef(null);
-  const closeTimerRef = useRef(null);
-  const isClosingRef = useRef(false);
-  const closeCallbackRef = useRef(null);
+  const {
+    selectedItem,
+    closingDetail,
+    detailMotion,
+    sourceElementRef,
+    isClosingRef,
+    openDetail,
+    animateDetailClose,
+    resetDetail,
+    onDetailTransitionEnd
+  } = usePieceDetail(stageRef);
 
   const pushPosition = useCallback((nextAlbumId, nextScreen, nextPage, itemId = null) => {
     const route = routeFor(nextAlbumId, nextScreen, nextPage, itemId);
@@ -59,9 +62,8 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
     setAlbumId(targetAlbum.id);
     setScreen(nextScreen);
     setPage(normalizedPage);
-    setSelectedItem(null);
-    setClosingDetail(false);
-  }, [mode]);
+    resetDetail();
+  }, [mode, resetDetail]);
 
   const commitTurn = useCallback((position, recordHistory) => {
     applyPosition(position.albumId, position.screen, position.page);
@@ -69,32 +71,6 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
   }, [applyPosition, pushPosition]);
 
   const pageTurn = usePageTurn({ album: stageAlbum, mode, screen, page, stageRef, spineRef, onCommit: commitTurn });
-
-  const finishDetailClose = useCallback(() => {
-    if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
-    closeTimerRef.current = null;
-    isClosingRef.current = false;
-    setClosingDetail(false);
-    setSelectedItem(null);
-    const source = sourceElementRef.current;
-    sourceElementRef.current = null;
-    if (source?.isConnected) source.focus({ preventScroll: true });
-    const callback = closeCallbackRef.current;
-    closeCallbackRef.current = null;
-    callback?.();
-  }, []);
-
-  const animateDetailClose = useCallback((onFinished = null) => {
-    if (!selectedItem) { onFinished?.(); return; }
-    if (isClosingRef.current) { if (onFinished) closeCallbackRef.current = onFinished; return; }
-    isClosingRef.current = true;
-    closeCallbackRef.current = onFinished;
-    const destination = getZoomTransform(sourceElementRef.current, stageRef.current);
-    if (!sourceElementRef.current?.isConnected) { finishDetailClose(); return; }
-    setClosingDetail(true);
-    setDetailMotion({ transform: destination, animated: true });
-    closeTimerRef.current = window.setTimeout(finishDetailClose, 850);
-  }, [finishDetailClose, selectedItem, stageRef]);
 
   const openPiece = useCallback((item, sourceElement, { recordHistory = true } = {}) => {
     if (!sourceElement || pageTurn.turningRef.current || isClosingRef.current) return;
@@ -106,15 +82,8 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
     } else if (recordHistory) {
       pushPosition(albumId, 'piece', targetPage, item.id);
     }
-    sourceElementRef.current = sourceElement;
-    const startTransform = getZoomTransform(sourceElement, stageRef.current);
-    setClosingDetail(false);
-    setSelectedItem(item);
-    setDetailMotion({ transform: startTransform, animated: false });
-    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
-      setDetailMotion({ transform: IDENTITY_TRANSFORM, animated: true });
-    }));
-  }, [albumId, applyPosition, mode, page, pageTurn.turningRef, pushPosition, screen, stageAlbum, stageRef]);
+    openDetail(item, sourceElement);
+  }, [albumId, applyPosition, isClosingRef, mode, openDetail, page, pageTurn.turningRef, pushPosition, screen, stageAlbum]);
 
   const selectAlbum = useCallback(nextAlbumId => {
     const nextAlbum = albums.find(entry => entry.id === nextAlbumId);
@@ -203,10 +172,6 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
     navigate: pageTurn.navigate,
     animateDetailClose
   });
-
-  const onDetailTransitionEnd = useCallback(event => {
-    if (event.target === event.currentTarget && event.propertyName === 'transform' && isClosingRef.current) finishDetailClose();
-  }, [finishDetailClose]);
 
   const openCover = useCallback(() => pageTurn.navigate(screen === 'back-cover' ? 'prev' : 'next'), [pageTurn.navigate, screen]);
 
