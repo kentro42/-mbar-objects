@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { getPhotoUrl } from '../../utils/albumRoutes.js';
+import { getPhotoUrl, getPublicAssetUrl } from '../../utils/albumRoutes.js';
 import useDelayedLoad from '../../hooks/useDelayedLoad.js';
 
 function CardSkeleton() {
@@ -16,6 +16,7 @@ function CardSkeleton() {
 
 export default function PieceCard({ album, item, index, onOpen, disabled }) {
   const photoUrl = getPhotoUrl(item.foto, album.cloudName);
+  const logoUrl = album.branding?.logo ? getPublicAssetUrl(album.branding.logo) : '';
   const imageRef = useRef(null);
   const load = useDelayedLoad(photoUrl, imageRef);
 
@@ -33,19 +34,26 @@ export default function PieceCard({ album, item, index, onOpen, disabled }) {
       <span className="polaroid__tape" aria-hidden="true" />
       <span className="polaroid__photo">
         {photoUrl && !load.failed ? (
-          <img
-            ref={imageRef}
-            src={photoUrl}
-            alt={`Fotografía de ${item.title}`}
-            className={load.loaded ? 'is-loaded' : ''}
-            loading="lazy"
-            decoding="async"
-            onLoad={load.onLoad}
-            onError={load.onError}
-          />
+          <>
+            <img
+              ref={imageRef}
+              src={photoUrl}
+              alt={`Fotografía de ${item.title}`}
+              className={load.loaded ? 'is-loaded' : ''}
+              loading="lazy"
+              decoding="async"
+              onLoad={load.onLoad}
+              onError={load.onError}
+            />
+            {load.loaded && logoUrl && (
+              <span className="polaroid__brand-mark" aria-hidden="true">
+                <img src={logoUrl} alt="" loading="lazy" decoding="async" />
+              </span>
+            )}
+          </>
         ) : (
           <span className="photo-pending">
-            <span className="photo-pending__flower" aria-hidden="true">✿</span>
+            <span className="photo-pending__flower" aria-hidden="true">Á</span>
             <span>{load.failed ? 'foto no disponible' : 'foto por pegar'}</span>
           </span>
         )}

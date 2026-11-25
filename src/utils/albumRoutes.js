@@ -10,9 +10,17 @@ export function getSpreadStart(page, mode, pageCount) {
   return mode === 'desktop' ? Math.floor(safePage / 2) * 2 : safePage;
 }
 
+export function getPublicAssetUrl(path) {
+  if (!path) return '';
+  if (/^https?:\/\//i.test(path)) return path;
+  const localPath = String(path).replace(/^\.?\//, '').replace(/^\/+/, '');
+  return `${import.meta.env.BASE_URL}${encodeURI(localPath)}`;
+}
+
 export function getPhotoUrl(photo, cloudName) {
   if (!photo) return '';
   if (/^https:\/\//i.test(photo)) return photo;
+  if (/^(?:\.\/|\/)?assets\//i.test(photo)) return getPublicAssetUrl(photo);
   if (!cloudName) return '';
   return `https://res.cloudinary.com/${cloudName}/image/upload/${encodeURIComponent(photo)}`;
 }

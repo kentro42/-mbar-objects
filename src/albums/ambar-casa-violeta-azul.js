@@ -1,18 +1,49 @@
-export const CLOUD_NAME = "genszcmv";
+export const CLOUD_NAME = 'genszcmv';
+
+// PNG aportados por el usuario. Se excluyen recursos marcados como IA y las
+// variantes duplicadas; cada archivo se reserva para una sola página.
+const stickers = [
+  { file: 'assets/pieces/alpinito.png', name: 'Alpinito' },
+  { file: 'assets/pieces/Arcoiris.png', name: 'Arcoíris' },
+  { file: 'assets/pieces/Avion_papelazul.png', name: 'Avión de papel azul' },
+  { file: 'assets/pieces/Barco.png', name: 'Barco' },
+  { file: 'assets/pieces/Bici_Hombre.png', name: 'Bicicleta' },
+  { file: 'assets/pieces/Caballo2.png', name: 'Caballo' },
+  { file: 'assets/pieces/Care_chimba.png', name: 'Care chimba' },
+  { file: 'assets/pieces/Carro_fantasma.png', name: 'Carro fantasma' },
+  { file: 'assets/pieces/Casa_cama.png', name: 'Casa-cama' },
+  { file: 'assets/pieces/cena_Patp.png', name: 'Cena' },
+  { file: 'assets/pieces/Dragon2.png', name: 'Dragón' },
+  { file: 'assets/pieces/Et.png', name: 'ET' },
+  { file: 'assets/pieces/Globo terraqueo.png', name: 'Globo terráqueo' },
+  { file: 'assets/pieces/Grabadora.png', name: 'Grabadora' },
+  { file: 'assets/pieces/Matera3.png', name: 'Matera' },
+  { file: 'assets/pieces/Montaña.png', name: 'Montaña' },
+  { file: 'assets/pieces/Notas_musicales.png', name: 'Notas musicales' },
+  { file: 'assets/pieces/Pato.png', name: 'Pato' },
+  { file: 'assets/pieces/Perro_angel.png', name: 'Perro ángel' },
+  { file: 'assets/pieces/Pocillo.png', name: 'Pocillo' },
+  { file: 'assets/pieces/Sinverguenza.png', name: 'Sinvergüenza' },
+  { file: 'assets/pieces/Sticker_casafantasma.png', name: 'Carro de casa fantasma' },
+  { file: 'assets/pieces/Sticker_mujer.png', name: 'Mujer' },
+  { file: 'assets/pieces/Telefono_publico.png', name: 'Teléfono público' },
+  { file: 'assets/pieces/Tv1.png', name: 'Televisor' },
+  { file: 'assets/pieces/Ambar_myfriend.png', name: 'Ámbar my friend' }
+];
 
 // Registros fuente disponibles. No se repiten automáticamente para completar
 // una cantidad arbitraria: cada ficha visible debe representar una pieza real.
 const plantillas = [
-  {title:"Singer de pedal, modelo 66", subtitle:"La pieza que abrió el taller de la abuela", categoria:"Máquina de coser", origen:"Alemania", material:"Hierro fundido y roble", uso:"Confección textil", year:"1932", video:"LdzSFBtqLks", p1:"Esta máquina llegó al local hace más de una década, traída por una clienta que la heredó de su abuela.", p2:"Toca el video para verla en movimiento."},
-  {title:"Reloj de péndulo Junghans", subtitle:"Marcó el ritmo del local por 18 años", categoria:"Reloj de pared", origen:"Alemania", material:"Nogal y latón", uso:"Cronometraje doméstico", year:"1958", video:"DOa0tPiWP8w", p1:"Su péndulo de latón todavía marca la hora con precisión.", p2:"Video de ejemplo — reemplazar por el clip real."},
-  {title:"Underwood No. 5", subtitle:"Escribió cartas que nunca se enviaron", categoria:"Máquina de escribir", origen:"Estados Unidos", material:"Acero y baquelita", uso:"Escritura mecánica", year:"1925", p1:"Sus teclas conservan el desgaste de años de uso diario.", p2:"Video de ejemplo — reemplazar por el clip real."},
-  {title:"Radio de válvulas Philips", subtitle:"La voz de la casa en tardes de lluvia", categoria:"Radio", origen:"Países Bajos", material:"Baquelita y madera", uso:"Recepción de radio AM", year:"1948", p1:"Todavía enciende y sintoniza estaciones AM.", p2:"Video de ejemplo — reemplazar por el clip real."},
-  {title:"Gramófono His Master's Voice", subtitle:"Suena igual que en 1920", categoria:"Gramófono", origen:"Reino Unido", material:"Latón y madera", uso:"Reproducción de discos", year:"1920", p1:"La bocina amplifica el sonido sin electricidad.", p2:"Video de ejemplo — reemplazar por el clip real."},
-  {title:"Mecedora vienesa Thonet", subtitle:"El asiento favorito de tres generaciones", categoria:"Mecedora", origen:"Austria", material:"Madera curvada y mimbre", uso:"Mobiliario", year:"1910", p1:"Su técnica de madera curvada la hizo famosa mundialmente.", p2:"Video de ejemplo — reemplazar por el clip real."},
-  {title:"Baúl de viaje Louis Vuitton (réplica)", subtitle:"Guardó secretos de otros tiempos", categoria:"Baúl", origen:"Francia", material:"Lona y madera", uso:"Almacenaje de viaje", year:"1905", p1:"Sus refuerzos metálicos aún resisten golpes de traslado.", p2:"Video de ejemplo — reemplazar por el clip real."},
-  {title:"Cámara Kodak Brownie", subtitle:"Capturó los primeros retratos familiares", categoria:"Cámara fotográfica", origen:"Estados Unidos", material:"Baquelita", uso:"Fotografía", year:"1957", p1:"Usaba rollo 620, hoy difícil de conseguir.", p2:"Video de ejemplo — reemplazar por el clip real."},
-  {title:"Candelabro de bronce", subtitle:"Iluminó cenas de tres generaciones", categoria:"Candelabro", origen:"España", material:"Bronce", uso:"Iluminación", year:"1900", p1:"Cada brazo conserva marcas de cera derretida.", p2:"Video de ejemplo — reemplazar por el clip real."},
-  {title:"Máquina registradora National", subtitle:"Sonaba en cada venta del mostrador", categoria:"Caja registradora", origen:"Estados Unidos", material:"Hierro y níquel", uso:"Cobro en tienda", year:"1915", p1:"Su timbre metálico anunciaba cada venta del día.", p2:"Video de ejemplo — reemplazar por el clip real."}
+  { title: 'Singer de pedal, modelo 66', subtitle: 'La pieza que abrió el taller de la abuela', categoria: 'Máquina de coser', origen: 'Alemania', material: 'Hierro fundido y roble', uso: 'Confección textil', year: '1932', video: 'LdzSFBtqLks', p1: 'Esta máquina llegó al local hace más de una década, traída por una clienta que la heredó de su abuela.', p2: 'Toca el video para verla en movimiento.' },
+  { title: 'Reloj de péndulo Junghans', subtitle: 'Marcó el ritmo del local por 18 años', categoria: 'Reloj de pared', origen: 'Alemania', material: 'Nogal y latón', uso: 'Cronometraje doméstico', year: '1958', video: 'DOa0tPiWP8w', p1: 'Su péndulo de latón todavía marca la hora con precisión.', p2: 'Video de ejemplo — reemplazar por el clip real.' },
+  { title: 'Underwood No. 5', subtitle: 'Escribió cartas que nunca se enviaron', categoria: 'Máquina de escribir', origen: 'Estados Unidos', material: 'Acero y baquelita', uso: 'Escritura mecánica', year: '1925', p1: 'Sus teclas conservan el desgaste de años de uso diario.', p2: 'Video de ejemplo — reemplazar por el clip real.' },
+  { title: 'Radio de válvulas Philips', subtitle: 'La voz de la casa en tardes de lluvia', categoria: 'Radio', origen: 'Países Bajos', material: 'Baquelita y madera', uso: 'Recepción de radio AM', year: '1948', p1: 'Todavía enciende y sintoniza estaciones AM.', p2: 'Video de ejemplo — reemplazar por el clip real.' },
+  { title: "Gramófono His Master's Voice", subtitle: 'Suena igual que en 1920', categoria: 'Gramófono', origen: 'Reino Unido', material: 'Latón y madera', uso: 'Reproducción de discos', year: '1920', p1: 'La bocina amplifica el sonido sin electricidad.', p2: 'Video de ejemplo — reemplazar por el clip real.' },
+  { title: 'Mecedora vienesa Thonet', subtitle: 'El asiento favorito de tres generaciones', categoria: 'Mecedora', origen: 'Austria', material: 'Madera curvada y mimbre', uso: 'Mobiliario', year: '1910', p1: 'Su técnica de madera curvada la hizo famosa mundialmente.', p2: 'Video de ejemplo — reemplazar por el clip real.' },
+  { title: 'Baúl de viaje Louis Vuitton (réplica)', subtitle: 'Guardó secretos de otros tiempos', categoria: 'Baúl', origen: 'Francia', material: 'Lona y madera', uso: 'Almacenaje de viaje', year: '1905', p1: 'Sus refuerzos metálicos aún resisten golpes de traslado.', p2: 'Video de ejemplo — reemplazar por el clip real.' },
+  { title: 'Cámara Kodak Brownie', subtitle: 'Capturó los primeros retratos familiares', categoria: 'Cámara fotográfica', origen: 'Estados Unidos', material: 'Baquelita', uso: 'Fotografía', year: '1957', p1: 'Usaba rollo 620, hoy difícil de conseguir.', p2: 'Video de ejemplo — reemplazar por el clip real.' },
+  { title: 'Candelabro de bronce', subtitle: 'Iluminó cenas de tres generaciones', categoria: 'Candelabro', origen: 'España', material: 'Bronce', uso: 'Iluminación', year: '1900', p1: 'Cada brazo conserva marcas de cera derretida.', p2: 'Video de ejemplo — reemplazar por el clip real.' },
+  { title: 'Máquina registradora National', subtitle: 'Sonaba en cada venta del mostrador', categoria: 'Caja registradora', origen: 'Estados Unidos', material: 'Hierro y níquel', uso: 'Cobro en tienda', year: '1915', p1: 'Su timbre metálico anunciaba cada venta del día.', p2: 'Video de ejemplo — reemplazar por el clip real.' }
 ];
 
 export const objetos = plantillas.map((t, index) => {
@@ -27,17 +58,17 @@ export const objetos = plantillas.map((t, index) => {
     material: t.material,
     uso: t.uso,
     year: `año ${t.year}`,
-    procedencia: "Colección del local",
-    estado: "Exhibición",
+    procedencia: 'Colección del local',
+    estado: 'Exhibición',
     foto: t.foto || '',
-    video: t.video || "",
+    video: t.video || '',
     p1: t.p1,
     p2: t.p2
   };
 });
 
 // La fotografía propia de la primera ficha sustituye el recurso de muestra.
-objetos[0].foto = "80e09bd1d6fec9dab31e192f8f0c9004.jpg";
+objetos[0].foto = '80e09bd1d6fec9dab31e192f8f0c9004.jpg';
 
 const album = {
   id: 'ambar-casa-violeta-azul',
@@ -45,19 +76,23 @@ const album = {
   brand: 'Ámbar',
   location: 'Casa Violeta Azul',
   title: 'El álbum de las piezas',
-  subtitle: 'Cuaderno de cosas queridas · desde la casa',
+  subtitle: 'Objetos, sabores y hogar',
   itemsPerPage: 4,
   pieces: objetos,
-  coverColor: '#724d43',
+  coverColor: '#8fcbed',
+  branding: {
+    logo: 'assets/pieces/Ambar_abduccioncirculo.png'
+  },
+  stickers,
   cover: {
     front: {
-      eyebrow: 'Archivo afectivo',
+      eyebrow: 'Objetos, sabores y hogar',
       title: 'Casa Violeta Azul',
-      note: 'Objetos que guardan historias y encuentran un nuevo lugar en la casa.'
+      note: 'Una casa para descubrir objetos queridos y las historias que traen consigo.'
     },
     back: {
-      note: 'Gracias por mirar despacio y cuidar la memoria de cada objeto.',
-      signature: 'Ámbar'
+      note: 'Gracias por mirar sin afán. Cada objeto merece otra historia.',
+      signature: 'Ámbar Tu Casa'
     }
   }
 };
