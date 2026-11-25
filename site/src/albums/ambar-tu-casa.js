@@ -176,7 +176,7 @@ const album = {
   brand: 'Ámbar Tu Casa',
   title: 'Ámbar Tu Casa',
   subtitle: 'Objetos, sabores y hogar',
-  itemsPerPage: 4,
+  itemsPerPage: 6,
   pieces: objetos,
   coverColor: '#dfc266',
   branding: {
