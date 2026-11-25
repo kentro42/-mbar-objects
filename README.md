@@ -37,6 +37,7 @@ Los números de línea siguientes corresponden al código de esta revisión. Pue
 | Texto pequeño de la portada y contraportada | `site/src/albums/ambar-tu-casa.js`, `cover.front` y `cover.back`, líneas 187–197 |
 | Color de las dos cubiertas | `site/src/albums/ambar-tu-casa.js`, `coverColor`, línea 181 |
 | Logo central de la portada y logo junto al QR | `site/src/albums/ambar-tu-casa.js`, `branding.logo` y `branding.signatureLogo`, líneas 182–185 |
+| Emblema rombo en la esquina inferior derecha del álbum abierto | `site/src/albums/ambar-tu-casa.js`, `branding.pageMark`, líneas 182–186; archivo `assets/pieces/Ambar_abduccionseñal.png`. Solo aparece en las páginas interiores |
 | Imagen de una Polaroid | `foto` de su objeto en `plantillas`; asignación especial de la primera foto, línea 170 |
 | Video de una pieza | Propiedad `video` en esa misma pieza. Ahora solo la primera tiene un ID asignado (línea 44); las demás quedan sin video hasta que se les ponga el propio |
 | Stickers que se pueden pegar a las hojas | Arreglo `stickers`, líneas 5–31; las rutas de imágenes apuntan a `site/public/assets/pieces/` |

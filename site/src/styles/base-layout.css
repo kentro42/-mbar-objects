@@ -74,6 +74,7 @@ button:focus-visible, select:focus-visible { outline: 2px dashed var(--rust); ou
 
 .book-state { position: absolute; z-index: 1; inset: 0; overflow: hidden; background: var(--paper); }
 .book-state--spread { display: flex; }
+.spread-mark { position: absolute; z-index: 2; right: 14px; bottom: clamp(56px, 7vh, 70px); width: clamp(56px, 6vw, 68px); aspect-ratio: 1; object-fit: contain; opacity: .96; filter: drop-shadow(0 2px 3px rgba(55,40,25,.18)); pointer-events: none; }
 .book-state--desktop { gap: 36px; }
 .book-state--cover { background: transparent; }
 .spread-page { position: relative; flex: 1 1 0; min-width: 0; width: auto; height: 100%; overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; background-color: var(--paper); background-image: repeating-linear-gradient(0deg, transparent 0 31px, rgba(117,97,70,.06) 31px 32px), radial-gradient(ellipse at 50% 25%, rgba(255,255,255,.34), transparent 65%); scrollbar-width: thin; scrollbar-color: rgba(112,86,57,.32) transparent; }
