@@ -80,7 +80,9 @@ export function readInitialRoute(albums, fallbackId) {
     }
   }
 
-  const album = albums.find(entry => entry.id === albumId) || albums.find(entry => entry.id === fallbackId) || albums[0];
+  const album = albums.find(entry => entry.id === albumId || entry.legacyRouteIds?.includes(albumId))
+    || albums.find(entry => entry.id === fallbackId)
+    || albums[0];
   if (itemId !== null) {
     const piece = album.pieces.find(entry => String(entry.id) === String(itemId));
     if (piece) {

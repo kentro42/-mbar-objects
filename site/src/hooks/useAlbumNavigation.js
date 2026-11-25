@@ -164,7 +164,7 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
   });
 
   const openCover = useCallback(() => pageTurn.navigate('next'), [pageTurn.navigate]);
-  const returnToAlbumStart = useCallback(() => pageTurn.navigateTo({ screen: 'pages', page: 0 }), [pageTurn.navigateTo]);
+  const returnToAlbumStart = useCallback(() => pageTurn.navigateTo({ screen: 'front-cover', page: 0 }), [pageTurn.navigateTo]);
   const returnToPreviousPage = useCallback(() => pageTurn.navigate('prev'), [pageTurn.navigate]);
 
   return {
