@@ -1,10 +1,9 @@
-import casaVioletaAzul from './ambar-casa-violeta-azul.js';
+import ambarTuCasa from './ambar-tu-casa.js';
 
-// Esta aplicación publica un único cuaderno. El ID se conserva para no romper
-// los enlaces de QR ya distribuidos.
-export const albums = [casaVioletaAzul];
-export const defaultAlbumId = casaVioletaAzul.id;
+// Este proyecto publica un solo álbum. Sus rutas antiguas se resuelven como alias.
+export const albums = [ambarTuCasa];
+export const defaultAlbumId = ambarTuCasa.id;
 
 export function findAlbum(id) {
-  return albums.find(album => album.id === id) || albums[0];
+  return albums.find(album => album.id === id || album.legacyRouteIds?.includes(id)) || albums[0];
 }

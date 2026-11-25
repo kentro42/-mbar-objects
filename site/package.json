@@ -1,11 +1,12 @@
 {
-  "name": "ambar-casa-violeta-album",
+  "name": "ambar-tu-casa-objetos",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "check:data": "node scripts/check-album.mjs",
+    "build": "npm run check:data && vite build",
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {

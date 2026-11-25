@@ -77,10 +77,12 @@ export default function PieceDetail({ albumId, item, motion, closing, sourceElem
           <div><dt>Estado</dt><dd>{item.estado}</dd></div>
           <div><dt>Antes servía para</dt><dd>{item.uso}</dd></div>
         </dl>
-        <div className="handwritten-copy">
-          <p>{item.p1}</p>
-          <p>{item.p2}</p>
-        </div>
+        {(item.p1 || item.p2) && (
+          <div className="handwritten-copy">
+            {item.p1 && <p>{item.p1}</p>}
+            {item.p2 && <p>{item.p2}</p>}
+          </div>
+        )}
 
         <div className="story-footer">
           <div className="qr-card">
