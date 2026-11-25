@@ -36,8 +36,9 @@ Los números de línea siguientes corresponden al código de esta revisión. Pue
 | Título, subtítulo, año, origen, material, uso e historia de una pieza | `site/src/albums/ambar-tu-casa.js`, arreglo `plantillas`, líneas 35–146 |
 | Texto pequeño de la portada y contraportada | `site/src/albums/ambar-tu-casa.js`, `cover.front` y `cover.back`, líneas 187–197 |
 | Color de las dos cubiertas | `site/src/albums/ambar-tu-casa.js`, `coverColor`, línea 181 |
-| Logo central de la portada y logo junto al QR | `site/src/albums/ambar-tu-casa.js`, `branding.logo` y `branding.signatureLogo`, líneas 182–185 |
-| Emblema rombo en la esquina inferior derecha del álbum abierto | `site/src/albums/ambar-tu-casa.js`, `branding.pageMark`, líneas 182–186; archivo `assets/pieces/Ambar_abduccionseñal.png`. Solo aparece en las páginas interiores |
+| Logo rombo en el centro de la portada y contraportada | `site/src/albums/ambar-tu-casa.js`, `branding.logo`, archivo `assets/pieces/Ambar_abduccionseñal.png`, líneas 182–186 |
+| Logo circular en la esquina inferior derecha del álbum abierto | `site/src/albums/ambar-tu-casa.js`, `branding.pageMark`, archivo `assets/pieces/Ambar_abduccioncirculo.png`, líneas 182–186; solo aparece en páginas interiores |
+| Logo de firma junto al QR | `site/src/albums/ambar-tu-casa.js`, `branding.signatureLogo`, archivo `assets/pieces/Ambar_logo.png`, líneas 182–186 |
 | Imagen de una Polaroid | `foto` de su objeto en `plantillas`; asignación especial de la primera foto, línea 170 |
 | Video de una pieza | Propiedad `video` en esa misma pieza. Ahora solo la primera tiene un ID asignado (línea 44); las demás quedan sin video hasta que se les ponga el propio |
 | Stickers que se pueden pegar a las hojas | Arreglo `stickers`, líneas 5–31; las rutas de imágenes apuntan a `site/public/assets/pieces/` |
@@ -83,12 +84,13 @@ foto: 'assets/pieces/pieza-011.webp'
 
 También puedes usar una URL HTTPS o un identificador de Cloudinary. La foto actualmente asignada a la primera ficha es un identificador de imagen de Cloudinary (línea 170); los demás campos `foto` están vacíos. No se asignaron stickers como fotos de objetos para no confundir ilustraciones con fotografías reales.
 
-Para reemplazar los logos, conserva una ruta local en `branding` (líneas 182–185):
+Para reemplazar los logos, conserva una ruta local en `branding` (líneas 182–186):
 
-- `logo` se muestra en el centro de la portada y la contraportada.
+- `logo` se muestra en el centro de la portada y la contraportada; actualmente es el emblema rombo.
+- `pageMark` se muestra abajo a la derecha de las páginas interiores; actualmente es el logotipo circular.
 - `signatureLogo` se muestra junto al QR en la historia de cada pieza.
 
-Copia el PNG nuevo en `site/public/assets/pieces/` y cambia el nombre de archivo en la propiedad apropiada. El sello/círculo superpuesto sobre las fotos de las Polaroids se eliminó; ya no existe `photoMark` ni un círculo blanco en esa zona. El logo de las cubiertas y el de la firma del QR son elementos distintos y se conservan.
+Copia el PNG nuevo en `site/public/assets/pieces/` y cambia el nombre de archivo en la propiedad apropiada. El sello circular que antes se superponía sobre las fotos de las Polaroids se eliminó; `pageMark` es el logo de esquina de las páginas interiores y no tapa las fotos. El logo de las cubiertas y el de la firma del QR son elementos distintos.
 
 El arreglo `stickers` (líneas 5–31) determina qué PNG puede usar el álbum. `site/src/utils/pageDecorations.js` asigna cuatro archivos distintos por hoja y no repite un archivo entre páginas. Si agregas una página nueva, recibe las siguientes pegatinas disponibles; agotado el catálogo, queda una nube CSS de reemplazo en lugar de reciclar stickers. `Care_chimba.png` permanece en la carpeta de assets, pero se quitó de la selección visible de este álbum.
 

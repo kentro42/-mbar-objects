@@ -180,9 +180,9 @@ const album = {
   pieces: objetos,
   coverColor: '#dfc266',
   branding: {
-    logo: 'assets/pieces/Ambar_abduccioncirculo.png',
+    logo: 'assets/pieces/Ambar_abduccionseñal.png',
     signatureLogo: 'assets/pieces/Ambar_logo.png',
-    pageMark: 'assets/pieces/Ambar_abduccionseñal.png'
+    pageMark: 'assets/pieces/Ambar_abduccioncirculo.png'
   },
   stickers,
   cover: {
