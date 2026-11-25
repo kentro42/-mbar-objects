@@ -4,9 +4,9 @@
 
 **Repositorio:** [github.com/kentro42/-mbar-objects](https://github.com/kentro42/-mbar-objects)
 
-Un cuaderno digital para explorar las piezas e historias de Ámbar. Está hecho con React y Vite, con una estética artesanal de scrapbook, portadas por álbum, navegación táctil y de teclado, páginas con giro 3D, fichas individuales y códigos QR que enlazan directamente con cada pieza.
+Un cuaderno digital para explorar las piezas e historias de Ámbar. Está hecho con React y Vite, con una estética de carta ilustrada y álbum artesanal, portadas por local, navegación táctil y de teclado, páginas con giro 3D, fichas individuales y códigos QR que enlazan directamente con cada pieza.
 
-La página inicial comienza en la portada. En pantallas apropiadas en orientación horizontal se muestra un libro abierto de dos páginas; en móvil y otras pantallas se usa una sola página. No hay servidor ni base de datos: el catálogo se define en archivos JavaScript, las imágenes pueden estar alojadas en Cloudinary o en una URL HTTPS y los videos se muestran desde YouTube.
+La página inicial comienza en la portada. En pantallas apropiadas en orientación horizontal se muestra un libro abierto de dos páginas; en móvil y otras pantallas se usa una sola página. No hay servidor ni base de datos: el catálogo se define en archivos JavaScript, las imágenes pueden estar en `public/`, Cloudinary o una URL HTTPS, y los videos se muestran desde YouTube.
 
 ## Cambios básicos: piezas, fotos y videos
 
@@ -29,7 +29,8 @@ El catálogo de Casa Violeta Azul está en `src/albums/ambar-casa-violeta-azul.j
 ```
 
 - **Textos y datos:** cambia los valores dentro del objeto correspondiente en `plantillas`.
-- **Foto:** escribe `foto: "https://..."` con una URL HTTPS directa a una imagen, o un identificador público de Cloudinary. El álbum tiene su nombre de nube en `CLOUD_NAME`. Si la foto no está asignada, se conserva el marco con “foto por pegar”.
+- **Foto:** puedes escribir una URL HTTPS, un identificador público de Cloudinary o una ruta local como `foto: "assets/pieces/pieza-001.webp"`. Las fotos locales se guardan dentro de `public/assets/pieces/`; no se pega la imagen dentro del JavaScript. Las rutas se construyen con la base de Vite para que funcionen también en GitHub Pages. Si la foto no está asignada, se conserva el marco con “foto por pegar”.
+- **Logo y stickers:** el logo y los PNG decorativos se guardan en `public/assets/pieces/`. En `src/albums/ambar-casa-violeta-azul.js`, `branding.logo` indica el distintivo del local y `stickers` enumera los recursos originales. El componente de páginas los reparte sin repetirlos; al agotarse la lista, usa nubes CSS en vez de reciclar una imagen.
 - **Video:** el campo `video` recibe el **ID de YouTube de 11 caracteres**, no la URL completa ni el código `<iframe>`. Por ejemplo, de `https://youtu.be/AbCdEf12345` se guarda `video: "AbCdEf12345"`. También sirve extraer el valor después de `v=` en un enlace `watch`, o el segmento después de `/shorts/` o `/embed/`. Déjalo vacío (`video: ""`) para que la ficha muestre su panel oscuro sin video.
 - **Añadir pieza:** añade un objeto más al final del arreglo `plantillas`. El código genera el `id` numérico y la etiqueta `Pieza 011`, `Pieza 012`, etc.; el QR también se genera automáticamente.
 - **Importante:** los ID actuales se calculan por la posición de la pieza en el arreglo. Añadir al final mantiene los ID existentes; reordenar o eliminar piezas puede cambiar los ID de las siguientes y, por tanto, sus enlaces QR. Haz una copia antes de reorganizar.
@@ -77,9 +78,11 @@ El workflow `.github/workflows/pages.yml` se ejecuta cuando hay un cambio en `ma
 | `src/albums/` | Datos por local y registro de todos los álbumes disponibles. |
 | `src/components/book/` | Estructura del libro, cubiertas, hojas, anillas y controles. |
 | `src/components/pieces/` | Contenido de páginas, tarjetas y detalle de cada pieza. |
+| `src/components/pieces/PageStickers.jsx` | Capa decorativa de nubes CSS y pegatinas únicas por página. |
 | `src/components/loading/` | Presentación de imágenes auxiliares con carga diferida. |
 | `src/hooks/` | Estado y comportamiento reutilizable: rutas, giros, gestos, teclado, modo y carga. |
 | `src/utils/albumRoutes.js` | Generación y lectura de rutas, QR, paginación y animación del detalle. |
+| `src/utils/pageDecorations.js` | Reparto determinista de stickers para evitar duplicados entre páginas. |
 | `src/utils/pageTurn.js` | Geometría, posición del lomo y fotogramas de la animación 3D. |
 | `src/styles/album.css` | Estética, distribución adaptable, capas 3D, anillas, shimmer y accesibilidad visual. |
 | `public/manus-routes.json` | Manifiesto de rutas de página del sitio. |

@@ -27,7 +27,7 @@ export default function PieceDetail({ albumId, item, motion, closing, sourceElem
     >
       <div className="detail-toolbar">
         <button className="back-to-album" type="button" onClick={onBack}><span aria-hidden="true">←</span> volver al álbum</button>
-        <span className="detail-toolbar__label">nota de inventario <span>✳</span></span>
+        <span className="detail-toolbar__label">memoria de la casa</span>
       </div>
 
       <div className={`piece-media${videoId ? ' piece-media--has-video' : ''}`}>
@@ -49,7 +49,7 @@ export default function PieceDetail({ albumId, item, motion, closing, sourceElem
           )
         ) : (
           <div className="empty-media" aria-label="Esta pieza todavía no tiene video">
-            <span className="empty-media__moon" aria-hidden="true">◌</span><span>un espacio en silencio</span>
+            <span className="empty-media__moon" aria-hidden="true">sin video</span>
           </div>
         )}
       </div>
@@ -62,7 +62,7 @@ export default function PieceDetail({ albumId, item, motion, closing, sourceElem
             <h2 id="detail-title" ref={headingRef} tabIndex={-1}>{item.title}</h2>
             <p className="story-subtitle" id="detail-description">{item.subtitle}</p>
           </div>
-          <span className="story-flower" aria-hidden="true">✿</span>
+          <span className="story-flower" aria-hidden="true">Á</span>
         </div>
 
         <dl className="piece-facts">
