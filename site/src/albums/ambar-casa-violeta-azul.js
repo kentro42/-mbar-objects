@@ -74,7 +74,6 @@ const album = {
   id: 'ambar-casa-violeta-azul',
   cloudName: CLOUD_NAME,
   brand: 'Ámbar Tu Casa',
-  location: 'Pueblo Viejo · La Estrella',
   title: 'Ámbar Tu Casa',
   subtitle: 'Objetos, sabores y hogar',
   itemsPerPage: 4,

@@ -620,3 +620,47 @@ html { background: #e8dcc6; }
   .stage--mobile .page-sticker--position-2,
   .stage--mobile .page-sticker--position-4 { width: clamp(28px, 8vw, 34px); }
 }
+
+/* Los controles de la contraportada ofrecen dos recorridos claramente separados. */
+.book-cover__actions {
+  display: grid;
+  width: min(100%, 360px);
+  gap: 8px;
+  margin-top: 18px;
+}
+.book-cover__actions .cover-action { width: 100%; margin-top: 0; }
+.cover-action--secondary {
+  padding-block: 7px;
+  color: #55432e;
+  background: rgba(255, 248, 231, .58);
+  font-size: 17px;
+}
+.cover-action--secondary:hover { color: #44331f; background: #fff2d1; }
+
+/* Stickers un poco mayores, alternados y espaciados en los márgenes. */
+.page-sticker { width: clamp(54px, 7vw, 78px); max-height: 92px; }
+.page-sticker--position-1 { top: 14%; right: 2%; left: auto; }
+.page-sticker--position-2 { top: 40%; right: auto; left: 1%; }
+.page-sticker--position-3 { right: 2%; bottom: 14%; left: auto; }
+.page-sticker--position-4 { right: auto; bottom: 40%; left: 1%; }
+
+/* En móvil, el giro anima solo transform/opacity; se evita luz y sombra por fotograma. */
+.stage--mobile .turn-leaf__face::before { display: none; }
+.stage--mobile .turn-leaf__face::after {
+  background: linear-gradient(90deg, rgba(49,37,24,.14), transparent 16%, transparent 84%, rgba(49,37,24,.1));
+}
+.stage--mobile .page-sticker {
+  width: clamp(42px, 11vw, 58px);
+  max-height: 70px;
+  filter: drop-shadow(0 2px 2px rgba(49,38,24,.16));
+}
+.stage--mobile .page-sticker--position-1 { top: 13%; right: 2%; left: auto; }
+.stage--mobile .page-sticker--position-2 { top: 40%; right: auto; left: 1%; }
+.stage--mobile .page-sticker--position-3 { right: 2%; bottom: 13%; left: auto; }
+.stage--mobile .page-sticker--position-4 { right: auto; bottom: 40%; left: 1%; }
+.stage--mobile .book-cover__actions { gap: 7px; margin-top: 14px; }
+.stage--mobile .cover-action { padding: 8px 12px; font-size: 18px; }
+.stage--mobile .cover-action--secondary { font-size: 16px; }
+@media (max-width: 390px) {
+  .stage--mobile .page-sticker { width: clamp(38px, 10.5vw, 44px); }
+}

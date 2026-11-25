@@ -103,12 +103,14 @@ export function createTurnAnimations({ node, spineNode, pending, onFinish }) {
   const frames = isCoverTurn ? coverFrames : pageFrames;
   const keyframes = pending.reduced
     ? [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'none' }]
-    : frames.map(([transform, shadow, light]) => ({
-        opacity: 1,
-        transform,
-        '--turn-shadow-opacity': shadow,
-        '--turn-light-opacity': light
-      }));
+    : frames.map(([transform, shadow, light]) => {
+        const frame = { opacity: 1, transform };
+        if (pending.mode !== 'mobile') {
+          frame['--turn-shadow-opacity'] = shadow;
+          frame['--turn-light-opacity'] = light;
+        }
+        return frame;
+      });
   const animation = node.animate(keyframes, { duration, easing: 'ease-in-out', fill: 'both' });
   const spineAnimation = spineNode?.animate(
     [{ left: pending.spineFrom }, { left: pending.spineTo }],

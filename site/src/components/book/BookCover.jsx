@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getPublicAssetUrl } from '../../utils/albumRoutes.js';
 
-export default function BookCover({ album, side, onOpen }) {
+export default function BookCover({ album, side, onOpen, onReturnToStart, onReturnToPrevious }) {
   const isFront = side === 'front';
   const cover = isFront ? album.cover.front : album.cover.back;
   const coverImage = cover.image ? getPublicAssetUrl(cover.image) : undefined;
   const logoUrl = album.branding?.logo ? getPublicAssetUrl(album.branding.logo) : '';
+  const [logoLoaded, setLogoLoaded] = useState(false);
+
+  useEffect(() => {
+    setLogoLoaded(false);
+    if (!logoUrl) return undefined;
+    let active = true;
+    const logo = new Image();
+    logo.onload = () => active && setLogoLoaded(true);
+    logo.onerror = () => active && setLogoLoaded(false);
+    logo.src = logoUrl;
+    if (logo.complete && logo.naturalWidth > 0) setLogoLoaded(true);
+    return () => {
+      active = false;
+      logo.onload = null;
+      logo.onerror = null;
+    };
+  }, [logoUrl]);
 
   return (
     <section
@@ -16,7 +33,7 @@ export default function BookCover({ album, side, onOpen }) {
       <div className="book-cover__inner">
         <span className="book-cover__brand">{album.brand}</span>
         <span className="book-cover__eyebrow">{isFront ? cover.eyebrow : 'Fin del recorrido'}</span>
-        {isFront && logoUrl && (
+        {isFront && logoUrl && logoLoaded && (
           <img
             className="book-cover__logo"
             src={logoUrl}
@@ -32,11 +49,16 @@ export default function BookCover({ album, side, onOpen }) {
             Abrir este cuaderno <span aria-hidden="true">→</span>
           </button>
         ) : (
-          <button id="backCoverBtn" type="button" className="cover-action" onClick={onOpen}>
-            Volver a curiosear <span aria-hidden="true">↶</span>
-          </button>
+          <div className="book-cover__actions">
+            <button id="backCoverBtn" type="button" className="cover-action" onClick={onReturnToStart}>
+              Volver a curiosear <span aria-hidden="true">↶</span>
+            </button>
+            <button id="backCoverPrevBtn" type="button" className="cover-action cover-action--secondary" onClick={onReturnToPrevious}>
+              Volver atrás <span aria-hidden="true">←</span>
+            </button>
+          </div>
         )}
-        {!isFront && logoUrl && (
+        {!isFront && logoUrl && logoLoaded && (
           <img className="book-cover__logo book-cover__logo--back" src={logoUrl} alt={`Logotipo de ${album.brand}`} decoding="async" />
         )}
         <span className="book-cover__signature">{isFront ? album.subtitle : cover.signature}</span>

@@ -12,7 +12,7 @@ export default function AlbumPage({ album, pageIndex, onOpenPiece, isPageTurning
     >
       <PageStickers album={album} pageIndex={pageIndex} />
       <header className="album-page-heading">
-        <span className="album-page-brand">{album.brand} · {album.location}</span>
+        <span className="album-page-brand">Ámbar Tu Casa</span>
         {pageIndex === 0 && (
           <>
             <p className="eyebrow">{album.subtitle}</p>

@@ -141,3 +141,7 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Aplicación del álbum dentro de site/
+site/node_modules/
+site/dist/

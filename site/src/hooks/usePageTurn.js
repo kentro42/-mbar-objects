@@ -82,13 +82,13 @@ export default function usePageTurn({ album, mode, screen, page, stageRef, spine
     setTurn
   });
 
-  const startTurn = useCallback((direction, { recordHistory = true, dragging = false } = {}) => {
+  const startTurn = useCallback((direction, { recordHistory = true, dragging = false, destination: requestedDestination } = {}) => {
     if (turnRef.current) return false;
-    const destination = nextPosition(album, screen, page, mode, direction);
+    const destination = requestedDestination || nextPosition(album, screen, page, mode, direction);
     if (!destination || (dragging && REDUCED_MOTION.matches)) return false;
 
     const reduced = REDUCED_MOTION.matches;
-    const focusId = ['prevBtn', 'nextBtn', 'openCoverBtn', 'backCoverBtn'].includes(document.activeElement?.id)
+    const focusId = ['prevBtn', 'nextBtn', 'openCoverBtn', 'backCoverBtn', 'backCoverPrevBtn'].includes(document.activeElement?.id)
       ? document.activeElement.id
       : null;
     const stageWidth = stageRef.current?.clientWidth || stageRef.current?.getBoundingClientRect().width || 0;
@@ -158,6 +158,11 @@ export default function usePageTurn({ album, mode, screen, page, stageRef, spine
     if (turnRef.current) return false;
     startTurn(direction);
     return true;
+  }, [startTurn]);
+
+  const navigateTo = useCallback(destination => {
+    if (!destination || turnRef.current) return false;
+    return startTurn(destination.screen === 'pages' ? 'prev' : 'next', { destination });
   }, [startTurn]);
 
   useLayoutEffect(() => {
@@ -265,6 +270,7 @@ export default function usePageTurn({ album, mode, screen, page, stageRef, spine
     spineRef,
     turningRef,
     navigate,
+    navigateTo,
     reverseTurn,
     cancelTurn,
     ...gestureHandlers
