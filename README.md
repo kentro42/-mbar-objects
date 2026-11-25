@@ -1,16 +1,16 @@
-# Ámbar Casa Violeta Azul — álbum interactivo
+# Ámbar Tu Casa — Casa de los objetos
 
 **Sitio publicado:** [https://kentro42.github.io/-mbar-objects/](https://kentro42.github.io/-mbar-objects/)
 
 **Repositorio:** [github.com/kentro42/-mbar-objects](https://github.com/kentro42/-mbar-objects)
 
-Un cuaderno digital para explorar las piezas e historias de Ámbar. Está hecho con React y Vite, con una estética de carta ilustrada y álbum artesanal, portadas por local, navegación táctil y de teclado, páginas con giro 3D, fichas individuales y códigos QR que enlazan directamente con cada pieza.
+Un álbum digital para recorrer objetos con historia de Ámbar Tu Casa. La identidad toma como descriptor público de la marca “Objetos, sabores y hogar” y se enfoca en el local de Pueblo Viejo, La Estrella. El proyecto tiene un único cuaderno interactivo, con portada, contraportada, navegación táctil y de teclado, giro de página 3D, fichas individuales y un QR distinto para cada pieza.
 
-La página inicial comienza en la portada. En pantallas apropiadas en orientación horizontal se muestra un libro abierto de dos páginas; en móvil y otras pantallas se usa una sola página. No hay servidor ni base de datos: el catálogo se define en archivos JavaScript, las imágenes pueden estar en `public/`, Cloudinary o una URL HTTPS, y los videos se muestran desde YouTube.
+La página empieza en la portada. En pantallas de escritorio adecuadas muestra el libro abierto; en móvil presenta una página a la vez. No necesita servidor ni base de datos: la colección vive en JavaScript, las imágenes pueden estar en `public/`, Cloudinary o una URL HTTPS y los videos se insertan desde YouTube.
 
-## Cambios básicos: piezas, fotos y videos
+## Cambiar piezas, fotos y videos
 
-El catálogo de Casa Violeta Azul está en `src/albums/ambar-casa-violeta-azul.js`. Allí edita el arreglo `plantillas`: cada objeto representa una pieza y contiene su información. Ejemplo:
+El catálogo está en `src/albums/ambar-casa-violeta-azul.js`. El nombre del archivo y el `id` técnico del álbum se conservan para no romper las rutas y los QR que ya se compartieron. En ese archivo edita el arreglo `plantillas`: cada objeto corresponde a una pieza.
 
 ```js
 {
@@ -28,25 +28,17 @@ El catálogo de Casa Violeta Azul está en `src/albums/ambar-casa-violeta-azul.j
 }
 ```
 
-- **Textos y datos:** cambia los valores dentro del objeto correspondiente en `plantillas`.
-- **Foto:** puedes escribir una URL HTTPS, un identificador público de Cloudinary o una ruta local como `foto: "assets/pieces/pieza-001.webp"`. Las fotos locales se guardan dentro de `public/assets/pieces/`; no se pega la imagen dentro del JavaScript. Las rutas se construyen con la base de Vite para que funcionen también en GitHub Pages. Si la foto no está asignada, se conserva el marco con “foto por pegar”.
-- **Logo y stickers:** el logo y los PNG decorativos se guardan en `public/assets/pieces/`. En `src/albums/ambar-casa-violeta-azul.js`, `branding.logo` indica el distintivo del local y `stickers` enumera los recursos originales. El componente de páginas los reparte sin repetirlos; al agotarse la lista, usa nubes CSS en vez de reciclar una imagen.
-- **Video:** el campo `video` recibe el **ID de YouTube de 11 caracteres**, no la URL completa ni el código `<iframe>`. Por ejemplo, de `https://youtu.be/AbCdEf12345` se guarda `video: "AbCdEf12345"`. También sirve extraer el valor después de `v=` en un enlace `watch`, o el segmento después de `/shorts/` o `/embed/`. Déjalo vacío (`video: ""`) para que la ficha muestre su panel oscuro sin video.
-- **Añadir pieza:** añade un objeto más al final del arreglo `plantillas`. El código genera el `id` numérico y la etiqueta `Pieza 011`, `Pieza 012`, etc.; el QR también se genera automáticamente.
-- **Importante:** los ID actuales se calculan por la posición de la pieza en el arreglo. Añadir al final mantiene los ID existentes; reordenar o eliminar piezas puede cambiar los ID de las siguientes y, por tanto, sus enlaces QR. Haz una copia antes de reorganizar.
+- **Textos y datos:** cambia los valores del objeto de la pieza en `plantillas`.
+- **Foto:** puedes escribir una URL HTTPS, un identificador público de Cloudinary o una ruta local como `foto: "assets/pieces/pieza-001.webp"`. Las fotos locales van en `public/assets/pieces/`; no se pega el contenido de la imagen dentro del JavaScript. Las rutas locales respetan la base de Vite/GitHub Pages. Si dejas `foto` vacía, se conserva el marco de foto.
+- **Logo:** `branding.logo` indica el distintivo circular amarillo usado en las cubiertas. `branding.photoMark` y `branding.signatureLogo` apuntan a `assets/pieces/Ambar_logo.png`, utilizado como marca discreta en cada foto cargada y como firma junto al QR. Los archivos originales están en `public/assets/pieces/`.
+- **Stickers:** el arreglo `stickers` enumera los PNG originales del usuario. `src/utils/pageDecorations.js` asigna cuatro archivos únicos por página; `src/components/pieces/PageStickers.jsx` los coloca en los márgenes. No se repiten entre páginas. Al agotarse el catálogo, las nubes decorativas se dibujan con CSS.
+- **Video:** `video` recibe el ID de YouTube de 11 caracteres, no la URL completa ni el código `<iframe>`. De `https://youtu.be/AbCdEf12345` se guarda `video: "AbCdEf12345"`. También puedes copiar el valor que sigue a `v=`, `/shorts/` o `/embed/`. Déjalo vacío (`video: ""`) para mostrar el panel oscuro sin video.
+- **Añadir pieza:** agrega un objeto al final de `plantillas`. El código crea el ID y la etiqueta `Pieza 011`, `Pieza 012`, etc.; asigna su QR único y la página recibe los stickers originales que sigan disponibles.
+- **Orden e identificadores:** los IDs se calculan según la posición en el arreglo. Agregar piezas al final mantiene los actuales; ordenar o borrar piezas puede cambiar los IDs posteriores y sus QR. Haz una copia antes de reorganizar.
 
-El detalle de una pieza presenta sus datos, textos, video opcional y un QR único. Cada QR apunta a la ruta de esa pieza dentro del álbum. Durante una prueba local, el QR lleva al sitio local; el enlace queda con el dominio público al escanear el QR generado en la web publicada.
+Cada ficha presenta año, tipo y origen en cintas amarillas; material, procedencia, estado, uso y relato aparecen como notas de papel. La frase bajo el QR es “escanea para conocerme”.
 
-## Añadir otro álbum o local
-
-1. Crea un archivo en `src/albums/`, por ejemplo `segundo-local.js`, exportando un objeto de álbum con `id`, `brand`, `location`, `title`, `subtitle`, `itemsPerPage`, `pieces`, `coverColor` y `cover.front` / `cover.back`.
-2. Usa en `pieces` el mismo formato de pieza que en el álbum existente. Dale al álbum un `id` corto, único y estable, escrito en minúsculas y separado por guiones.
-3. Importa el nuevo módulo y agrégalo al arreglo `albums` de `src/albums/index.js`.
-4. Opcionalmente, coloca las imágenes de portada en `public/albums/<id-del-album>/` y configura `cover.front.image` y `cover.back.image` con rutas relativas a `public/`, por ejemplo `albums/segundo-local/portada.jpg`. Si no agregas esas imágenes, el diseño usa la cubierta artesanal. `coverColor` define un único color base compartido por portada y contraportada.
-
-La portada permite elegir otro cuaderno cuando hay más de un álbum registrado.
-
-## Ejecutar y revisar el sitio
+## Ejecutar y revisar
 
 Necesitas Node.js 22 y npm. Desde la carpeta del repositorio:
 
@@ -62,37 +54,31 @@ npm run build
 npm run preview
 ```
 
-La salida compilada queda en `dist/`; no edites esos archivos a mano. Modifica los archivos fuente de `src/` y deja que Vite los genere de nuevo. En el sitio, las flechas izquierda/derecha del teclado y los botones permiten cambiar de página; en dispositivos táctiles se puede deslizar horizontalmente. Al reducir el movimiento en el sistema operativo, la transición se sustituye por un fundido sencillo.
+La salida compilada queda en `dist/`; modifica los archivos de `src/`, no edites la salida a mano. Las flechas izquierda/derecha y los botones cambian de página; en dispositivos táctiles puedes deslizar. Con `prefers-reduced-motion` activo, el giro se reemplaza por un fundido simple.
 
-## Cómo se publica
+## Publicación
 
-El workflow `.github/workflows/pages.yml` se ejecuta cuando hay un cambio en `main` (o manualmente desde GitHub Actions). Instala las dependencias, ejecuta `npm run build` y publica `dist/` en GitHub Pages. Comprueba que la acción termine correctamente si el sitio tarda en reflejar una actualización.
+El workflow `.github/workflows/pages.yml` se ejecuta al cambiar `main` o manualmente desde GitHub Actions. Instala dependencias, ejecuta `npm run build` y publica `dist/` en GitHub Pages. La rama de revisión no reemplaza el sitio publicado: se puede probar antes de fusionarla.
 
 ## Mapa del código
 
 | Ruta | Responsabilidad |
 | --- | --- |
-| `index.html` | HTML inicial, idioma, título y elemento raíz de React. |
-| `src/main.jsx` | Punto de entrada: monta `AlbumApp` y carga los estilos. |
-| `src/app/AlbumApp.jsx` | Conecta el modo de pantalla, la navegación y el layout del libro. |
-| `src/albums/` | Datos por local y registro de todos los álbumes disponibles. |
+| `index.html` | Idioma, título, descripción y nodo raíz de React. |
+| `src/main.jsx` | Monta `AlbumApp` y carga los estilos. |
+| `src/app/AlbumApp.jsx` | Conecta modo de pantalla, navegación y libro único. |
+| `src/albums/ambar-casa-violeta-azul.js` | Textos, piezas, logos, stickers y cubiertas del álbum. |
+| `src/albums/index.js` | Registro del cuaderno único y su ID técnico estable. |
 | `src/components/book/` | Estructura del libro, cubiertas, hojas, anillas y controles. |
-| `src/components/pieces/` | Contenido de páginas, tarjetas y detalle de cada pieza. |
-| `src/components/pieces/PageStickers.jsx` | Capa decorativa de nubes CSS y pegatinas únicas por página. |
-| `src/components/loading/` | Presentación de imágenes auxiliares con carga diferida. |
-| `src/hooks/` | Estado y comportamiento reutilizable: rutas, giros, gestos, teclado, modo y carga. |
-| `src/utils/albumRoutes.js` | Generación y lectura de rutas, QR, paginación y animación del detalle. |
-| `src/utils/pageDecorations.js` | Reparto determinista de stickers para evitar duplicados entre páginas. |
-| `src/utils/pageTurn.js` | Geometría, posición del lomo y fotogramas de la animación 3D. |
-| `src/styles/album.css` | Estética, distribución adaptable, capas 3D, anillas, shimmer y accesibilidad visual. |
+| `src/components/pieces/` | Páginas, tarjetas, ficha de objeto y stickers. |
+| `src/components/loading/` | Imágenes auxiliares con carga diferida. |
+| `src/hooks/` | Rutas, giros, gestos, teclado, modo y carga. |
+| `src/utils/albumRoutes.js` | Rutas, QR, recursos locales y paginación. |
+| `src/utils/pageDecorations.js` | Reparto de stickers sin repetir archivos. |
+| `src/utils/pageTurn.js` | Geometría y fotogramas de la animación 3D. |
+| `src/styles/album.css` | Paleta, tipografía, papel, post-its, nubes, stickers y capas 3D. |
 | `public/manus-routes.json` | Manifiesto de rutas de página del sitio. |
-| `.github/workflows/pages.yml` | Compilación y despliegue automático a GitHub Pages. |
-| `package.json` / `package-lock.json` | Dependencias y comandos reproducibles del proyecto. |
+| `.github/workflows/pages.yml` | Compilación y despliegue de GitHub Pages. |
+| `package.json` / `package-lock.json` | Dependencias y comandos reproducibles. |
 
-## Rutas útiles
-
-Las rutas actuales tienen el formato `#album/<id>/pagina/<n>`, `#album/<id>/pieza/<id>`, `#album/<id>/portada` y `#album/<id>/contraportada`. Los números de página de la URL empiezan en 1. También se mantienen los enlaces QR antiguos `#pagina-n` y `#pieza-id` del álbum original.
-
----
-
-Proyecto de catálogo visual; sus piezas, imágenes y videos se editan en los módulos del álbum. Para aprender cómo se conectan React, las rutas, la animación 3D y los gestos táctiles, consulta la guía de aprendizaje que acompaña esta entrega (no forma parte del repositorio).
+Las rutas de página y pieza mantienen el formato `#album/<id>/pagina/<n>` y `#album/<id>/pieza/<id>`. Aunque se muestra un solo álbum, el identificador técnico actual no cambia para mantener válidos los QR existentes. También se leen los enlaces antiguos `#pagina-n` y `#pieza-id`.

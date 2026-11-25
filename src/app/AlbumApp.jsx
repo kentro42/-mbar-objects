@@ -20,7 +20,6 @@ export default function AlbumApp() {
       turnLeafRef={book.turnLeafRef}
       spineRef={book.spineRef}
       album={book.album}
-      albums={albums}
       mode={mode}
       screen={book.screen}
       page={book.page}
@@ -31,7 +30,6 @@ export default function AlbumApp() {
       sourceElement={book.sourceElementRef.current}
       onOpenPiece={book.openPiece}
       onOpenCover={book.openCover}
-      onSelectAlbum={book.selectAlbum}
       onPrevious={() => book.navigate('prev')}
       onNext={() => book.navigate('next')}
       onPieceBack={goBackFromPiece}

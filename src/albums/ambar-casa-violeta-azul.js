@@ -73,25 +73,27 @@ objetos[0].foto = '80e09bd1d6fec9dab31e192f8f0c9004.jpg';
 const album = {
   id: 'ambar-casa-violeta-azul',
   cloudName: CLOUD_NAME,
-  brand: 'Ámbar',
-  location: 'Casa Violeta Azul',
-  title: 'El álbum de las piezas',
+  brand: 'Ámbar Tu Casa',
+  location: 'Pueblo Viejo · La Estrella',
+  title: 'Ámbar Tu Casa',
   subtitle: 'Objetos, sabores y hogar',
   itemsPerPage: 4,
   pieces: objetos,
-  coverColor: '#8fcbed',
+  coverColor: '#dfc266',
   branding: {
-    logo: 'assets/pieces/Ambar_abduccioncirculo.png'
+    logo: 'assets/pieces/Ambar_abduccioncirculo.png',
+    photoMark: 'assets/pieces/Ambar_logo.png',
+    signatureLogo: 'assets/pieces/Ambar_logo.png'
   },
   stickers,
   cover: {
     front: {
       eyebrow: 'Objetos, sabores y hogar',
-      title: 'Casa Violeta Azul',
-      note: 'Una casa para descubrir objetos queridos y las historias que traen consigo.'
+      title: 'Casa de los objetos',
+      note: 'Cada objeto guarda una historia. Mire sin afán; todavía tiene algo que contar.'
     },
     back: {
-      note: 'Gracias por mirar sin afán. Cada objeto merece otra historia.',
+      note: 'Gracias por mirar sin afán. Cada objeto guarda recuerdos que siguen aquí.',
       signature: 'Ámbar Tu Casa'
     }
   }

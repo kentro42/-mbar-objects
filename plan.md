@@ -1,26 +1,25 @@
-# Plan: rediseño de Ámbar Casa Violeta Azul
+# Plan: segunda pasada de identidad para Ámbar Tu Casa
 
 ## Dirección visual
 
-- **Movimiento:** carta ilustrada de casa/restaurante local mezclada con cuaderno de recortes hecho a mano; evitar acabados genéricos, renders y recursos de aspecto sintético.
-- **Principios:** papel crema cálido; azul cielo y azul tinta como colores principales; coral/salmón y amarillo del distintivo como acentos; ilustraciones PNG auténticas; fotos de objetos siempre legibles y no tapadas.
-- **Paleta:** crema de carta para hojas; azul cielo para el lomo, nubes y algunos cuadros; azul profundo para texto; coral para sellos, líneas y controles; amarillo sólo como guiño al distintivo de Ámbar.
-- **Composición:** mantener el cuaderno y la paginación existentes. Usar margen editorial, renglones suaves, tarjetas inclinadas de manera mínima y stickers en zonas periféricas; que los elementos decorativos queden detrás de las fotos y del texto.
-- **Motivos distintivos:** distintivo circular real de Ámbar Tu Casa; nubes CSS de borde irregular en azul, coral y blanco; PNG del usuario colocados como pegatinas con sombra de papel.
-- **Interacción y movimiento:** conservar la navegación táctil, de teclado y el giro 3D ya implementados. Limitar los cambios de estilo a feedback leve; respetar `prefers-reduced-motion`.
-- **Tipografía:** Fredoka para titulares con peso y personalidad; Kalam para notas manuscritas; DM Sans para lectura y DM Mono para etiquetas pequeñas. Mantener alternativas locales del sistema.
-- **Esencia de marca:** “Objetos, sabores y hogar”; cercana, curiosa y auténtica.
-- **Voz:** hablar con calidez y sin solemnidad. Ejemplos: “Objetos que ya tienen casa en nuestras historias.” / “Mira sin afán; cada cosa tiene algo que contar.”
-- **Logotipo:** usar el archivo auténtico `Ambar_abduccioncirculo.png`; centrarlo en la portada y reproducirlo pequeño en la esquina inferior izquierda de cada foto, dentro de una placa clara de bajo contraste.
-- **Color de marca:** azul cielo de la carta, equilibrado con el amarillo presente en el distintivo original.
+- **Movimiento:** conservar el cuaderno y la carta artesanal ya implementados; hacer que se sienta más cálido, vivido y propio de Ámbar, no como una plantilla genérica.
+- **Principios:** beige y crema como superficies dominantes; amarillo miel y mostaza para cintas y notas; azules y coral/rojo como acentos; integrar la variedad cromática que ya traen los PNG originales.
+- **Composición:** mantener el libro, su navegación y la legibilidad de las piezas. Colocar stickers auténticos en márgenes libres, visibles y sin tapar las fotografías ni los textos.
+- **Motivos distintivos:** conservar el distintivo circular amarillo `Ambar_abduccioncirculo.png` en las cubiertas; usar `Ambar_logo.png` como marca pequeña de cada foto y firma; nubes CSS azules, coral y blancas; cintas amarillas para los datos principales y post-its de tonos sacados de la paleta de los stickers.
+- **Interacción:** conservar giro 3D, rutas de página/pieza, navegación táctil y de teclado y `prefers-reduced-motion`. Mantener el mismo identificador de álbum para no invalidar QR existentes.
+- **Tipografía:** conservar Fredoka para títulos, Kalam para anotaciones y DM Sans/DM Mono para lectura y etiquetas.
+- **Esencia y voz:** nombre visible “Ámbar Tu Casa”; descriptor público “Objetos, sabores y hogar”. El álbum se titula editorialmente “Casa de los objetos”. Usar un tono cálido sobre objetos con historia, sin atribuir lemas inventados ni añadir datos no verificados de las piezas.
+- **Alcance:** un solo cuaderno, una cubierta y contracubierta coherentes. Eliminar el selector visible y las instrucciones para registrar un segundo álbum/local; conservar el `id` actual y las rutas antiguas para compatibilidad.
 
 ## Implementación y estructura
 
-- `src/albums/ambar-casa-violeta-azul.js`: color de cubierta, distintivo auténtico y catálogo explícito de stickers originales.
-- `src/utils/albumRoutes.js`: resolver URLs de Cloudinary, HTTPS y rutas de `public/` con la base relativa de Vite/GitHub Pages.
-- `src/utils/pageDecorations.js`: repartir stickers de forma determinista por índice de página y no repetir archivos.
-- `src/components/pieces/PageStickers.jsx`: capa decorativa accesible que coloca los stickers y nubes detrás del contenido; las páginas nuevas reciben los siguientes recursos únicos.
-- `src/components/pieces/AlbumPage.jsx` y `PieceCard.jsx`: integrar la decoración de página y el distintivo no obstructivo de cada fotografía.
-- `src/components/book/BookCover.jsx`: portada/contraportada de la misma familia visual, con el logo centrado en portada.
-- `src/styles/album.css`: paleta, tipografía, papel, nubes CSS, tarjetas y comportamiento móvil, preservando las clases de transición del libro.
-- No generar ni sustituir stickers; los assets PNG del usuario son la fuente decorativa. Si se agota el catálogo único, usar variaciones de nubes CSS en vez de reciclar un sticker.
+- `src/albums/ambar-casa-violeta-azul.js`: actualizar copy, ubicación y color miel; mantener el identificador técnico estable; conservar el logo circular amarillo en cubiertas y asignar `Ambar_logo.png` a las fotos y la firma.
+- `src/albums/index.js`, `useAlbumNavigation.js`, `AlbumApp.jsx`, `AlbumLayout.jsx`, `BookState.jsx` y `BookCover.jsx`: quitar la ruta de selección de otro libro sin cambiar el estado de página/pieza ni la lectura de QR existentes.
+- `src/utils/pageDecorations.js` y `PageStickers.jsx`: colocar cuatro stickers únicos por página, con posiciones alternativas y nube CSS cuando el catálogo único se termine.
+- `PieceDetail.jsx`: cintas amarillas para número, época, clase y procedencia; post-its para material, procedencia, estado, uso y descripción; actualizar el texto del QR y usar el logo original en la firma.
+- `album.css`: hacer dominante el papel beige, ampliar el amarillo y usar azul/coral y colores de los stickers como detalles. Respetar el layout móvil/escritorio y todas las clases de giro.
+- `index.html` y `README.md`: actualizar el nombre público, descripción y guía para reflejar un único álbum.
+
+## Base de identidad
+
+La biografía pública de Ámbar usa “Ámbar, Tu casa” y “Objetos, sabores y hogar”; una publicación oficial vincula la marca con objetos que tienen historia. Referencias: [perfil oficial](https://www.instagram.com/ambar.tucasa/?hl=en), [publicación sobre objetos](https://www.instagram.com/p/Desm-eOG-Hw/) y [enlaces oficiales](https://linktr.ee/ambartucasa).

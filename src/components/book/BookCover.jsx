@@ -1,7 +1,7 @@
 import React from 'react';
 import { getPublicAssetUrl } from '../../utils/albumRoutes.js';
 
-export default function BookCover({ album, side, albums, onOpen, onSelectAlbum }) {
+export default function BookCover({ album, side, onOpen }) {
   const isFront = side === 'front';
   const cover = isFront ? album.cover.front : album.cover.back;
   const coverImage = cover.image ? getPublicAssetUrl(cover.image) : undefined;
@@ -11,20 +11,20 @@ export default function BookCover({ album, side, albums, onOpen, onSelectAlbum }
     <section
       className={`book-cover book-cover--${side}`}
       style={{ '--cover-image': coverImage ? `url("${coverImage}")` : undefined }}
-      aria-label={isFront ? `Portada de ${album.location}` : `Contraportada de ${album.location}`}
+      aria-label={isFront ? `Portada de ${album.brand}` : `Contraportada de ${album.brand}`}
     >
       <div className="book-cover__inner">
-        <span className="book-cover__brand">{album.brand} · objetos, sabores y hogar</span>
+        <span className="book-cover__brand">{album.brand}</span>
         <span className="book-cover__eyebrow">{isFront ? cover.eyebrow : 'Fin del recorrido'}</span>
         {isFront && logoUrl && (
           <img
             className="book-cover__logo"
             src={logoUrl}
-            alt={`Logotipo de ${album.brand} Tu Casa`}
+            alt={`Logotipo de ${album.brand}`}
             decoding="async"
           />
         )}
-        <h1>{isFront ? cover.title : album.location}</h1>
+        <h1>{isFront ? cover.title : album.brand}</h1>
         <span className="book-cover__ornament" aria-hidden="true"><span /></span>
         <p>{cover.note}</p>
         {isFront ? (
@@ -37,17 +37,9 @@ export default function BookCover({ album, side, albums, onOpen, onSelectAlbum }
           </button>
         )}
         {!isFront && logoUrl && (
-          <img className="book-cover__logo book-cover__logo--back" src={logoUrl} alt={`Logotipo de ${album.brand} Tu Casa`} decoding="async" />
+          <img className="book-cover__logo book-cover__logo--back" src={logoUrl} alt={`Logotipo de ${album.brand}`} decoding="async" />
         )}
         <span className="book-cover__signature">{isFront ? album.subtitle : cover.signature}</span>
-        {albums.length > 1 && (
-          <label className="album-picker">
-            <span>Elegir otro cuaderno</span>
-            <select value={album.id} onChange={event => onSelectAlbum(event.target.value)}>
-              {albums.map(entry => <option key={entry.id} value={entry.id}>{entry.location}</option>)}
-            </select>
-          </label>
-        )}
       </div>
     </section>
   );

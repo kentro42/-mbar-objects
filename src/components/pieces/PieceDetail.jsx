@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getAbsolutePieceUrl } from '../../utils/albumRoutes.js';
+import { getAbsolutePieceUrl, getPublicAssetUrl } from '../../utils/albumRoutes.js';
 import DelayedImage from '../loading/DelayedImage.jsx';
 
-export default function PieceDetail({ albumId, item, motion, closing, sourceElement, onBack, onTransitionEnd }) {
+export default function PieceDetail({ albumId, item, motion, closing, sourceElement, brandLogo, onBack, onTransitionEnd }) {
   const [playing, setPlaying] = useState(false);
   const headingRef = useRef(null);
   const videoId = /^[A-Za-z0-9_-]{11}$/.test(item.video || '') ? item.video : '';
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&data=${encodeURIComponent(getAbsolutePieceUrl(albumId, item))}`;
   const cardPhoto = sourceElement?.querySelector('.polaroid__photo img')?.currentSrc;
   const imageStyle = cardPhoto ? { '--piece-photo': `url(${JSON.stringify(cardPhoto)})` } : undefined;
+  const yearLabel = String(item.year || '').replace(/^año\s*/i, '').trim();
+  const brandLogoUrl = brandLogo ? getPublicAssetUrl(brandLogo) : '';
 
   useEffect(() => {
     headingRef.current?.focus({ preventScroll: true });
@@ -27,7 +29,7 @@ export default function PieceDetail({ albumId, item, motion, closing, sourceElem
     >
       <div className="detail-toolbar">
         <button className="back-to-album" type="button" onClick={onBack}><span aria-hidden="true">←</span> volver al álbum</button>
-        <span className="detail-toolbar__label">memoria de la casa</span>
+        <span className="detail-toolbar__label">Ámbar Tu Casa · objetos con historia</span>
       </div>
 
       <div className={`piece-media${videoId ? ' piece-media--has-video' : ''}`}>
@@ -44,7 +46,7 @@ export default function PieceDetail({ albumId, item, motion, closing, sourceElem
             <>
               <DelayedImage src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`} alt={`Vista previa del video de ${item.title}`} className="piece-media__image" />
               <button className="play-button" type="button" onClick={() => setPlaying(true)} aria-label={`Reproducir video de ${item.title}`}><span aria-hidden="true">▶</span></button>
-              <span className="media-caption">un pequeño recuerdo en movimiento</span>
+              <span className="media-caption">un recuerdo en movimiento</span>
             </>
           )
         ) : (
@@ -55,10 +57,14 @@ export default function PieceDetail({ albumId, item, motion, closing, sourceElem
       </div>
 
       <article className="piece-story">
-        <div className="story-topline"><span>{item.year}</span><span>{item.categoria}</span><span>{item.origen}</span></div>
+        <div className="story-topline" aria-label="Datos de la pieza">
+          <span className="story-tape"><small>Año</small>{yearLabel || 'Sin fecha'}</span>
+          <span className="story-tape"><small>Objeto</small>{item.categoria}</span>
+          <span className="story-tape"><small>Origen</small>{item.origen}</span>
+        </div>
         <div className="story-heading-row">
           <div>
-            <p className="story-kicker">{item.tag} <span>·</span> una pieza de la casa</p>
+            <p className="story-kicker"><span className="piece-number-tape">{item.tag}</span><span className="story-kicker__note">una pieza de la casa</span></p>
             <h2 id="detail-title" ref={headingRef} tabIndex={-1}>{item.title}</h2>
             <p className="story-subtitle" id="detail-description">{item.subtitle}</p>
           </div>
@@ -71,14 +77,24 @@ export default function PieceDetail({ albumId, item, motion, closing, sourceElem
           <div><dt>Estado</dt><dd>{item.estado}</dd></div>
           <div><dt>Antes servía para</dt><dd>{item.uso}</dd></div>
         </dl>
-        <div className="handwritten-copy"><p>{item.p1}</p><p>{item.p2}</p></div>
+        <div className="handwritten-copy">
+          <p>{item.p1}</p>
+          <p>{item.p2}</p>
+        </div>
 
         <div className="story-footer">
           <div className="qr-card">
             <DelayedImage src={qrUrl} alt={`Código QR único para ${item.tag}: ${item.title}`} width={112} height={112} fit="contain" />
-            <span>escanea para volver a esta historia</span>
+            <span>escanea para conocerme</span>
           </div>
-          <p className="signed-note">con cariño,<br /><span>Ámbar</span></p>
+          <p className="signed-note">
+            <span className="signed-note__greeting">con cariño,</span>
+            {brandLogoUrl ? (
+              <img className="signed-note__logo" src={brandLogoUrl} alt="Ámbar Tu Casa" loading="lazy" decoding="async" />
+            ) : (
+              <strong className="signed-note__fallback">Ámbar Tu Casa</strong>
+            )}
+          </p>
         </div>
       </article>
       <span className="detail-tape" aria-hidden="true" />

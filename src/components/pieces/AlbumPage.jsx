@@ -17,7 +17,7 @@ export default function AlbumPage({ album, pageIndex, onOpenPiece, isPageTurning
           <>
             <p className="eyebrow">{album.subtitle}</p>
             <h1>{album.title}</h1>
-            <p className="intro-note">Cada cosa tiene su rincón y algo que contar.</p>
+            <p className="intro-note">Cada objeto tiene historia; este es su rincón.</p>
           </>
         )}
         <span className="page-stamp" aria-hidden="true">hoja<br />{String(pageIndex + 1).padStart(2, '0')}</span>
@@ -37,7 +37,7 @@ export default function AlbumPage({ album, pageIndex, onOpenPiece, isPageTurning
         ))}
       </section>
       {!pieces.length && <p className="blank-page-note">Una hoja en blanco, lista para una nueva historia.</p>}
-      <footer className="page-colophon">colección de {album.brand} <span>·</span> objetos con memoria</footer>
+      <footer className="page-colophon">{album.brand} <span>·</span> objetos con memoria</footer>
     </article>
   );
 }

@@ -85,16 +85,6 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
     openDetail(item, sourceElement);
   }, [albumId, applyPosition, isClosingRef, mode, openDetail, page, pageTurn.turningRef, pushPosition, screen, stageAlbum]);
 
-  const selectAlbum = useCallback(nextAlbumId => {
-    const nextAlbum = albums.find(entry => entry.id === nextAlbumId);
-    if (!nextAlbum || nextAlbum.id === albumId) return;
-    pageTurn.cancelTurn();
-    setPendingPieceId(null);
-    applyPosition(nextAlbum.id, 'front-cover', 0);
-    const route = routeFor(nextAlbum.id, 'front-cover', 0);
-    window.history.pushState(route, '', routeUrl(route));
-  }, [albumId, albums, applyPosition, pageTurn.cancelTurn]);
-
   const applyRoute = useCallback(route => {
     const targetAlbum = findAlbum(route.albumId);
     if (!targetAlbum) return;
@@ -190,7 +180,6 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
     turningRef: pageTurn.turningRef,
     openPiece,
     navigate: pageTurn.navigate,
-    selectAlbum,
     openCover,
     animateDetailClose,
     onDetailTransitionEnd,
