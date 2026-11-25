@@ -1,23 +1,21 @@
 # Resultados del rediseño
 
-## Identidad visual de carta Ámbar
+## Identidad visual de carta Ámbar — primera pasada
 
-- [x] Actualizar la estética general del álbum para acercarla a la carta de Ámbar: papel crema, azules de cielo, acentos coral/salmón y tipografía con carácter artesanal.
-- [x] Evitar una página genérica o de aspecto sintético; no incorporar fotos de stock ni stickers generados.
-- [x] Crear nubes de fondo azules, blancas y coral con CSS, manteniéndolas como decoración y sin estorbar la lectura.
+- [x] Actualizar la estética inicial del álbum para acercarla a la carta de Ámbar, evitar una página genérica o sintética y no incorporar fotos de stock ni stickers generados.
+- [x] Crear nubes CSS azules, blancas y coral sin estorbar la lectura.
+- [x] Usar el distintivo auténtico en cubiertas y en marca discreta de fotografías; conservar íntegros los PNG del usuario.
+- [x] Asignar stickers únicos a cada página y usar nubes CSS cuando el catálogo no alcance.
+- [x] Rediseñar portada y contraportada sin cambiar la animación/navegación, y mantener fotos locales compatibles con GitHub Pages.
+- [x] Compilar la primera pasada y dejarla en una rama separada de `main`.
 
-## Logo y stickers auténticos
+## Segunda pasada: Ámbar Tu Casa
 
-- [x] Usar el distintivo auténtico cargado por el usuario, centrado en la portada y en tamaño menor en la contraportada.
-- [x] Mostrar ese logo discretamente en la esquina inferior izquierda de cada fotografía cargada, sin tapar el objeto.
-- [x] Poner stickers PNG distintos como pegatinas de fondo en cada página; no repetir una imagen dentro de una misma hoja ni entre páginas.
-- [x] Al crear páginas nuevas por aumento de piezas, asignarles automáticamente recursos únicos disponibles; al agotarse el catálogo, usar variaciones CSS en lugar de reciclar stickers.
-- [x] Mantener intactos los archivos originales subidos por el usuario y excluir del conjunto ornamental los recursos marcados como IA.
-
-## Cubiertas, páginas y publicación
-
-- [x] Rediseñar portada y contraportada con una familia de color coherente e integrar PNGs auténticos sin alterar la animación/navegación existente.
-- [x] Aplicar el sistema visual en todas las páginas generadas y en las fichas, manteniendo la lectura de fotos y textos.
-- [x] Mantener el diseño responsivo, la navegación por teclado/táctil y `prefers-reduced-motion`.
-- [x] Permitir rutas de foto locales bajo `public/assets/pieces/` junto a HTTPS y Cloudinary, usando rutas compatibles con GitHub Pages.
-- [x] Compilar el sitio, revisar el reparto de stickers sin duplicados y dejar los cambios en una rama de revisión separada de `main`.
+- [x] Hacer que el beige/crema y los amarillos sean dominantes; usar azul y coral/rojo como detalles e integrar otros colores presentes en los stickers originales.
+- [x] Mostrar más PNG originales en cada página, en zonas visibles de margen que no oculten fotos ni textos. No repetir un PNG en la hoja ni entre páginas; al añadir páginas, repartir los recursos disponibles y usar nubes CSS al agotarse.
+- [x] Presentar un único álbum bajo el nombre “Ámbar Tu Casa”, usar textos sustentados por su comunicación pública y retirar el selector y las instrucciones para crear un segundo álbum/local. Conservar el `id` actual y los enlaces QR anteriores.
+- [x] Cambiar la pequeña marca de las fotos y la firma inferior por `Ambar_logo.png`, sin bloquear la vista de las piezas.
+- [x] Encerrar en cintas amarillas el número de pieza y sus datos de época/tipo/procedencia; presentar material, procedencia, estado, uso y relato en post-its de colores.
+- [x] Cambiar el mensaje bajo cada QR a “escanea para conocerme”.
+- [x] Actualizar título, metadatos y README para nombrar Ámbar Tu Casa y documentar que el proyecto contiene un único álbum.
+- [x] Compilar el sitio, comprobar que los stickers sean únicos y confirmar que las rutas actuales y QR antiguos sigan resolviendo a la pieza correcta.

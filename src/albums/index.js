@@ -1,7 +1,7 @@
 import casaVioletaAzul from './ambar-casa-violeta-azul.js';
 
-// Para añadir otro local: crea un módulo de álbum con el mismo contrato y
-// agréguelo a este arreglo. Cada álbum trae sus piezas y sus dos cubiertas.
+// Esta aplicación publica un único cuaderno. El ID se conserva para no romper
+// los enlaces de QR ya distribuidos.
 export const albums = [casaVioletaAzul];
 export const defaultAlbumId = casaVioletaAzul.id;
 

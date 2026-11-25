@@ -3,14 +3,14 @@ import BookCover from './BookCover.jsx';
 import BookPage from './BookPage.jsx';
 
 export default function BookState({
-  album, albums, screen, page, mode, onOpenPiece, onOpenCover, onSelectAlbum,
+  album, screen, page, mode, onOpenPiece, onOpenCover,
   ariaHidden = false, inert = false, isPageTurning = false, layer = 'resting', pageIndexes
 }) {
   if (screen !== 'pages') {
     const side = screen === 'back-cover' ? 'back' : 'front';
     return (
       <div className={`book-state book-state--cover book-state--${side}`} data-book-state={layer} aria-hidden={ariaHidden} inert={inert}>
-        <BookCover album={album} side={side} albums={albums} onOpen={onOpenCover} onSelectAlbum={onSelectAlbum} />
+        <BookCover album={album} side={side} onOpen={onOpenCover} />
       </div>
     );
   }

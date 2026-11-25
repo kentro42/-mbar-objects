@@ -16,7 +16,8 @@ function CardSkeleton() {
 
 export default function PieceCard({ album, item, index, onOpen, disabled }) {
   const photoUrl = getPhotoUrl(item.foto, album.cloudName);
-  const logoUrl = album.branding?.logo ? getPublicAssetUrl(album.branding.logo) : '';
+  const markPath = album.branding?.photoMark || album.branding?.logo;
+  const logoUrl = markPath ? getPublicAssetUrl(markPath) : '';
   const imageRef = useRef(null);
   const load = useDelayedLoad(photoUrl, imageRef);
 
@@ -46,8 +47,8 @@ export default function PieceCard({ album, item, index, onOpen, disabled }) {
               onError={load.onError}
             />
             {load.loaded && logoUrl && (
-              <span className="polaroid__brand-mark" aria-hidden="true">
-                <img src={logoUrl} alt="" loading="lazy" decoding="async" />
+              <span className="polaroid__brand-mark polaroid__brand-mark--watermark" aria-hidden="true">
+                <img src={logoUrl} alt="" loading="eager" decoding="async" />
               </span>
             )}
           </>

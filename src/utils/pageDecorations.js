@@ -1,4 +1,4 @@
-export const STICKERS_PER_PAGE = 2;
+export const STICKERS_PER_PAGE = 4;
 
 const cloudVariants = ['blue', 'coral', 'white'];
 

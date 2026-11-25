@@ -1,6 +1,6 @@
 import React from 'react';
 import { getPublicAssetUrl } from '../../utils/albumRoutes.js';
-import { getPageCloudVariant, getPageStickerAssignments } from '../../utils/pageDecorations.js';
+import { getPageCloudVariant, getPageStickerAssignments, STICKERS_PER_PAGE } from '../../utils/pageDecorations.js';
 
 export default function PageStickers({ album, pageIndex }) {
   const stickers = getPageStickerAssignments(album, pageIndex);
@@ -16,7 +16,7 @@ export default function PageStickers({ album, pageIndex }) {
       {stickers.map((sticker, index) => (
         <img
           key={sticker.file}
-          className={`page-sticker page-sticker--${index === 0 ? 'first' : 'second'}`}
+          className={`page-sticker page-sticker--position-${index + 1}`}
           src={getPublicAssetUrl(sticker.file)}
           alt=""
           loading="lazy"
@@ -24,7 +24,7 @@ export default function PageStickers({ album, pageIndex }) {
           style={{ '--sticker-tilt': `${((pageIndex * 7 + index * 11) % 17) - 8}deg` }}
         />
       ))}
-      {!stickers.length && <span className="page-sticker-cloud-fallback" />}
+      {stickers.length < STICKERS_PER_PAGE && <span className="page-sticker-cloud-fallback" />}
     </div>
   );
 }

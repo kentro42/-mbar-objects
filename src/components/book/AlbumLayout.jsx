@@ -7,9 +7,9 @@ import PieceDetail from '../pieces/PieceDetail.jsx';
 import { getSpineLeft, getTurnLeafLayout } from '../../utils/pageTurn.js';
 
 export default function AlbumLayout({
-  stageRef, turnLeafRef, spineRef, album, albums, mode, screen, page, turn, selectedItem,
+  stageRef, turnLeafRef, spineRef, album, mode, screen, page, turn, selectedItem,
   closingDetail, detailMotion, sourceElement, onOpenPiece, onOpenCover,
-  onSelectAlbum, onPrevious, onNext, onPieceBack, onDetailTransitionEnd,
+  onPrevious, onNext, onPieceBack, onDetailTransitionEnd,
   onPointerDown, onPointerMove, onPointerUp, onPointerCancel, onClickCapture
 }) {
   const displayMode = turn?.mode || mode;
@@ -42,13 +42,11 @@ export default function AlbumLayout({
   const renderState = (position, options = {}) => (
     <BookState
       album={album}
-      albums={albums}
       screen={position.screen}
       page={position.page}
       mode={turn?.mode || mode}
       onOpenPiece={onOpenPiece}
       onOpenCover={onOpenCover}
-      onSelectAlbum={onSelectAlbum}
       ariaHidden={options.hidden}
       inert={options.inert}
       isPageTurning={Boolean(turn)}
@@ -67,7 +65,7 @@ export default function AlbumLayout({
         id="stage"
         ref={stageRef}
         style={{ '--album-cover-color': album.coverColor || '#724d43' }}
-        aria-label={`Álbum ${album.location}`}
+        aria-label={`Álbum ${album.brand}`}
         data-album-id={album.id}
         data-screen={currentScreen}
         onPointerDownCapture={onPointerDown}
@@ -148,6 +146,7 @@ export default function AlbumLayout({
             motion={detailMotion}
             closing={closingDetail}
             sourceElement={sourceElement}
+            brandLogo={album.branding?.signatureLogo}
             onBack={onPieceBack}
             onTransitionEnd={onDetailTransitionEnd}
           />
