@@ -181,7 +181,8 @@ const album = {
   coverColor: '#dfc266',
   branding: {
     logo: 'assets/pieces/Ambar_abduccioncirculo.png',
-    signatureLogo: 'assets/pieces/Ambar_logo.png'
+    signatureLogo: 'assets/pieces/Ambar_logo.png',
+    pageMark: 'assets/pieces/Ambar_abduccionseñal.png'
   },
   stickers,
   cover: {
