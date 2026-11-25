@@ -6,7 +6,7 @@ export default function PageNavigation({ album, mode, screen, page, pageCount, t
     : `${String(page + 1).padStart(2, '0')} / ${String(pageCount).padStart(2, '0')}`;
 
   return (
-    <nav className="page-navigation" aria-label={`Navegación de ${album.location}`}>
+    <nav className="page-navigation" aria-label={`Navegación del álbum ${album.brand}`}>
       <button id="prevBtn" type="button" onClick={onPrevious} disabled={turning} aria-label={screen === 'pages' && page === 0 ? 'Ver portada' : 'Página anterior'}>
         <span aria-hidden="true">←</span> {screen === 'pages' && page === 0 ? 'Portada' : 'Anterior'}
       </button>

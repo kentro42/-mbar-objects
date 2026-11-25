@@ -163,7 +163,9 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
     animateDetailClose
   });
 
-  const openCover = useCallback(() => pageTurn.navigate(screen === 'back-cover' ? 'prev' : 'next'), [pageTurn.navigate, screen]);
+  const openCover = useCallback(() => pageTurn.navigate('next'), [pageTurn.navigate]);
+  const returnToAlbumStart = useCallback(() => pageTurn.navigateTo({ screen: 'pages', page: 0 }), [pageTurn.navigateTo]);
+  const returnToPreviousPage = useCallback(() => pageTurn.navigate('prev'), [pageTurn.navigate]);
 
   return {
     album: stageAlbum,
@@ -181,6 +183,8 @@ export default function useAlbumNavigation(albums, mode, stageRef) {
     openPiece,
     navigate: pageTurn.navigate,
     openCover,
+    returnToAlbumStart,
+    returnToPreviousPage,
     animateDetailClose,
     onDetailTransitionEnd,
     pointerHandlers: {

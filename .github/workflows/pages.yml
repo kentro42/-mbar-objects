@@ -25,14 +25,17 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: site/package-lock.json
       - name: Instalar dependencias
         run: npm ci
+        working-directory: site
       - name: Compilar sitio
         run: npm run build
+        working-directory: site
       - name: Preparar artefacto de Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: site/dist
 
   deploy:
     environment:

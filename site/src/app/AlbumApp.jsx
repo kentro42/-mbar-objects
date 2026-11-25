@@ -30,6 +30,8 @@ export default function AlbumApp() {
       sourceElement={book.sourceElementRef.current}
       onOpenPiece={book.openPiece}
       onOpenCover={book.openCover}
+      onReturnToStart={book.returnToAlbumStart}
+      onReturnToPrevious={book.returnToPreviousPage}
       onPrevious={() => book.navigate('prev')}
       onNext={() => book.navigate('next')}
       onPieceBack={goBackFromPiece}

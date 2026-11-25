@@ -8,7 +8,7 @@ import { getSpineLeft, getTurnLeafLayout } from '../../utils/pageTurn.js';
 
 export default function AlbumLayout({
   stageRef, turnLeafRef, spineRef, album, mode, screen, page, turn, selectedItem,
-  closingDetail, detailMotion, sourceElement, onOpenPiece, onOpenCover,
+  closingDetail, detailMotion, sourceElement, onOpenPiece, onOpenCover, onReturnToStart, onReturnToPrevious,
   onPrevious, onNext, onPieceBack, onDetailTransitionEnd,
   onPointerDown, onPointerMove, onPointerUp, onPointerCancel, onClickCapture
 }) {
@@ -47,6 +47,8 @@ export default function AlbumLayout({
       mode={turn?.mode || mode}
       onOpenPiece={onOpenPiece}
       onOpenCover={onOpenCover}
+      onReturnToStart={onReturnToStart}
+      onReturnToPrevious={onReturnToPrevious}
       ariaHidden={options.hidden}
       inert={options.inert}
       isPageTurning={Boolean(turn)}
